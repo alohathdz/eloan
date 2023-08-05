@@ -33,9 +33,10 @@ app.get('/member', (req, res) => {
 })
 
 app.post('/member/create', (req, res) => {
-    const name = req.body.name;
 
-    db.query("INSERT INTO member (`name`) VALUES(?)", [name], (err, result) => {
+    const values = req.body.name;
+
+    db.query("INSERT INTO member (`name`) VALUES(?)", [values], (err, result) => {
         if (err) {
             console.log(err);
         } else {

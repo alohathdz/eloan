@@ -8,32 +8,17 @@ function CreateMember() {
 
     const navigate = useNavigate();
 
-    const [name, setName] = useState("");
+    const [values, setValues] = useState({
+        name: ''
+    })
     const [validate, setValidate] = useState({});
 
     const createMember = async (e) => {
         e.preventDefault();
 
-        const formData = new FormData();
-
-        formData.append('name', name);
-
-        await axios.post(`http://localhost:8081/member/create`, formData).then(({ data }) => {
-            Swal.fire({
-                icon: "success",
-                text: data.message
-            })
-            navigate("/member");
-        }).catch(({ response }) => {
-            if (response.status === 422) {
-                setValidate(response.data.errors);
-            } else {
-                Swal.fire({
-                    text: response.data.message,
-                    icon: "error"
-                })
-            }
-        })
+        await axios.post(`http://localhost:8081/member/create`, values)
+            .then(res => console.log(res))
+            .catch(err => console.log(err))
     }
 
     return (
@@ -63,9 +48,7 @@ function CreateMember() {
                                         <Col>
                                             <Form.Group controlId="Name">
                                                 <Form.Label>ชื่อ</Form.Label>
-                                                <Form.Control type="text" value={name} onChange={(event) => {
-                                                    setName(event.target.value)
-                                                }} />
+                                                <Form.Control type="text" onChange={e => setValues({ ...values, name: e.target.value })} />
                                             </Form.Group>
                                         </Col>
                                     </Row>
