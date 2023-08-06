@@ -17,7 +17,14 @@ function CreateMember() {
         e.preventDefault();
 
         await axios.post(`http://localhost:8081/member/create`, values)
-            .then(res => console.log(res))
+            .then(res => {
+                Swal.fire({
+                    icon: "success",
+                    text: "Insert successfully."
+                })
+
+                navigate("/member");
+            })
             .catch(err => console.log(err))
     }
 

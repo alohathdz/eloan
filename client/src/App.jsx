@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import Home from './components/Home'
 import CreateMember from './components/member/CreateMember'
 import ShowMember from "./components/member/ShowMember"
+import EditMember from "./components/member/EditMember"
 
 function App() {
 
@@ -23,9 +24,10 @@ function App() {
         <Row>
           <Col md="12">
             <Routes>
-              <Route exact path="/" element={<Home />} />
+              <Route exact path="/" element={<ShowMember />} />
               <Route path="/member" element={<ShowMember />} />
               <Route path="/member/create" element={<CreateMember />} />
+              <Route path="/member/edit/:id" element={<EditMember />} />
             </Routes>
           </Col>
         </Row>

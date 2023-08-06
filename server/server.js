@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/member', (req, res) => {
-    db.query("SELECT * from member", (err, result) => {
+    db.query("SELECT * FROM member", (err, result) => {
         if (err) {
             console.log(err);
         } else {
@@ -41,6 +41,19 @@ app.post('/member/create', (req, res) => {
             console.log(err);
         } else {
             res.send("Insert success.");
+        }
+    })
+})
+
+app.get('/member/edit/:id', (req, res) => {
+
+    const id = req.params.id;
+
+    db.query("SELECT * FROM member WHERE member_id = ?", id, (err, result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.send(result);
         }
     })
 })
