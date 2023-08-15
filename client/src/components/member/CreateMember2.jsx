@@ -7,12 +7,15 @@ import { useNavigate } from 'react-router-dom'
 function CreateMember() {
 
     const navigate = useNavigate();
-    const [name, setName] = useState('');
 
-    const handleCreate = async (e) => {
+    const [values, setValues] = useState({
+        name: ''
+    })
+
+    const createMember = async (e) => {
         e.preventDefault();
 
-        await axios.post(`http://localhost:8081/member/create`, {name})
+        await axios.post(`http://localhost:8081/member/create`, values)
             .then(res => {
                 Swal.fire({
                     icon: "success",
@@ -33,12 +36,12 @@ function CreateMember() {
                             <h4 className="card-title">เพิ่มข้อมูลผู้กู้</h4>
                             <hr />
                             <div className="form-wrapper">
-                                <Form onSubmit={handleCreate}>
+                                <Form onSubmit={createMember}>
                                     <Row>
                                         <Col>
                                             <Form.Group controlId="Name">
                                                 <Form.Label>ชื่อ</Form.Label>
-                                                <Form.Control type="text" onChange={e => setName(e.target.value)} />
+                                                <Form.Control type="text" onChange={e => setValues({ ...values, name: e.target.value })} />
                                             </Form.Group>
                                         </Col>
                                     </Row>

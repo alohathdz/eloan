@@ -7,6 +7,8 @@ import { useNavigate, useParams } from 'react-router-dom'
 function EditMember() {
 
     const { id } = useParams();
+    const [name, setName] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         getMember();
@@ -14,14 +16,23 @@ function EditMember() {
 
     const getMember = async () => {
         await axios.get(`http://localhost:8081/member/edit/${id}`)
-        .then(res => {
-            setValues({...values, name: res.data[0].name})
-        }).catch(err => console.log(err))
+            .then(res => {
+                setName(res.data[0].name)
+            }).catch(err => console.log(err))
     }
 
-    const [values, setValues] = useState({
-        name: '',
-    })
+    const handleUpdate = async (e) => {
+        e.preventDefault();
+
+        await axios.put(`http://localhost:8081/member/update/${id}`, {name})
+            .then(res => {
+                Swal.fire({
+                    icon: "success",
+                    text: "Update successfully!"
+                })
+                navigate("/member")
+            }).catch(err => console.log(err))
+    }
 
     return (
         <div className="container">
@@ -32,12 +43,12 @@ function EditMember() {
                             <h4 className="card-title">เพิ่มข้อมูลผู้กู้</h4>
                             <hr />
                             <div className="form-wrapper">
-                                <Form>
+                                <Form onSubmit={handleUpdate}>
                                     <Row>
                                         <Col>
                                             <Form.Group controlId="Name">
                                                 <Form.Label>ชื่อ</Form.Label>
-                                                <Form.Control type="text" value={values.name} onChange={e => setValues({ ...values, name: e.target.value })} />
+                                                <Form.Control type="text" value={name} onChange={e => setName(e.target.value)} />
                                             </Form.Group>
                                         </Col>
                                     </Row>

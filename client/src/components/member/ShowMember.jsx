@@ -18,6 +18,34 @@ function ShowMember() {
         });
     }
 
+    const handleDelete = async (id) => {
+        const isConfirm = await Swal.fire({
+            title: "ยันยันการลบข้อมูล",
+            text: "เมื่อยันแล้ว ข้อมูลจะหายไป",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "ยืนยัน",
+            cancelButtonText: "ยกเลิก"
+        }).then((result) => {
+            return result.isConfirmed
+        })
+
+        if (!isConfirm) {
+            return;
+        }
+
+        await axios.delete(`http://localhost:8081/member/${id}`)
+            .then(res => {
+                Swal.fire({
+                    icon: "success",
+                    text: "Delete successfully!"
+                })
+                getMembers();
+            }).catch(err => console.log(err))
+    }
+
     return (
         <div className="container">
             <div className="row">
@@ -54,7 +82,7 @@ function ShowMember() {
                                                 <td>
                                                     <Link to={`/member/detail/${row.member_id}`} className='btn btn-info btn-sm'>การกู้</Link>
                                                     <Link to={`/member/edit/${row.member_id}`} className='btn btn-sm btn-warning mx-2'>แก้ไข</Link>
-                                                    <Button className='btn btn-danger btn-sm'>ลบ</Button>
+                                                    <Button className='btn btn-danger btn-sm' onClick={e => handleDelete(row.member_id)}>ลบ</Button>
                                                 </td>
                                             </tr>
                                         ))

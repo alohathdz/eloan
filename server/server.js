@@ -7,6 +7,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.listen(8081, () => {
+    console.log("Server start!");
+})
+
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
@@ -14,50 +18,52 @@ const db = mysql.createConnection({
     database: "loan"
 })
 
-app.get('/', (req, res) => {
+app.get('/member', (req, res) => {
     const sql = "SELECT * FROM member";
+
     db.query(sql, (err, result) => {
-        if(err) return res.json({Message: "Error query mysql."});
+        if (err) return res.json("Error select!");
         return res.json(result);
     })
 })
 
-app.get('/member', (req, res) => {
-    db.query("SELECT * FROM member", (err, result) => {
-        if (err) {
-            console.log(err);
-        } else {
-            res.send(result);
-        }
-    })
-})
-
 app.post('/member/create', (req, res) => {
-
+    const sql = "INSERT INTO member (name) VALUES(?)";
     const values = req.body.name;
 
-    db.query("INSERT INTO member (`name`) VALUES(?)", [values], (err, result) => {
-        if (err) {
-            console.log(err);
-        } else {
-            res.send("Insert success.");
-        }
+    db.query(sql, [values], (err, result) => {
+        if (err) return res.json("Error insert!");
+        return res.json(result);
     })
 })
 
 app.get('/member/edit/:id', (req, res) => {
-
+    const sql = "SELECT * FROM member WHERE member_id = ?";
     const id = req.params.id;
 
-    db.query("SELECT * FROM member WHERE member_id = ?", id, (err, result) => {
-        if (err) {
-            console.log(err);
-        } else {
-            res.send(result);
-        }
+    db.query(sql, id, (err, result) => {
+        if (err) return res.json("Error edit!");
+        return res.json(result);
     })
 })
 
-app.listen(8081, () => {
-    console.log("Server start!");
+app.put('/member/update/:id', (req, res) => {
+    const sql = "UPDATE member SET name = ? WHERE member_id = ?";
+    const id = req.params.id;
+    const values = req.body.name;
+
+    db.query(sql, [values, id], (err, result) => {
+        if (err) return res.json("Eror update!");
+        return res.json(result);
+    })
+})
+
+app.delete('/member/:id', (req, res) => {
+    const sql = "DELETE FROM member WHERE member_id = ?";
+    const id = req.params.id;
+
+    db.query(sql, id, (err, result) => {
+        if (err) return res.json("Error delete!");
+        return res.json(result);
+    })
 })
