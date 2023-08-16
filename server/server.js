@@ -90,23 +90,25 @@ app.get('/member/detail/:id', (req, res) => {
     })
 })
 
-app.post('/member/loan/create/:id', (req, res) => {
-    const sql = "INSERT INTO detail (amount, rate, start_date, member_id) VALUES(?, ?, ?, ?)";
-    const id = req.params.id;
-    const values = [
-        req.body.amount,
-        req.body.rate,
-    ];
+app.post('/member/loan/create', (req, res) => {
+    const sql = "INSERT INTO detail (amount, rate, start_date, member_id) VALUES(?)";
 
     let ts = Date.now();
     let date_time = new Date(ts);
     let date = date_time.getDate();
     let month = date_time.getMonth() + 1;
     let year = date_time.getFullYear();
-    const start_date = year + "-" + month + "-" + date;
+    let start_date = year + "-" + month + "-" + date;
 
-    db.query(sql, [values, start_date, id], (err, result) => {
-        if (err) return res.json("Error insert!");
+    const values = [
+        req.body.amount,
+        req.body.rate,
+        start_date,
+        req.body.id,
+    ];
+
+    db.query(sql, [values], (err, result) => {
+        if (err) return res.json(err);
         return res.json(result);
     })
 })

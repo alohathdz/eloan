@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { Button } from 'react-bootstrap'
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import moment from 'moment'
 
 function ShowMember() {
 
@@ -55,7 +56,7 @@ function ShowMember() {
                                                 <td>{row.detail_id}</td>
                                                 <td>{row.amount}</td>
                                                 <td>{row.amount / 100 * row.rate}</td>
-                                                <td>{row.start_date}</td>
+                                                <td>{moment(row.start_date).locale('th').format('LL')}</td>
                                                 <td></td>
                                             </tr>
                                         ))

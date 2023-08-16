@@ -12,6 +12,7 @@ function CreateLoan() {
     const [amount, setAmount] = useState('');
     const [rate, setRate] = useState('');
     const [start_date, setStartDate] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         getMember();
@@ -27,8 +28,9 @@ function CreateLoan() {
     const handleCreate = async (e) => {
         e.preventDefault();
 
-        await axios.put(`http://localhost:8081/member/loan/create/${id}`, {amount, rate})
+        await axios.post(`http://localhost:8081/member/loan/create`, {amount, rate, id})
         .then(res => {
+            console.log(res);
             Swal.fire({
                 icon: "success",
                 text: "Create Loan Successfully."
