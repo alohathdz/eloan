@@ -4,9 +4,11 @@ import 'bootstrap/dist/css/bootstrap.css'
 import { Navbar, Container, Row, Col } from 'react-bootstrap'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import Home from './components/Home'
-import CreateMember from './components/member/CreateMember'
-import ShowMember from "./components/member/ShowMember"
-import EditMember from "./components/member/EditMember"
+import CreateMember from './components/CreateMember'
+import ShowMember from "./components/ShowMember"
+import EditMember from "./components/EditMember"
+import DetailMember from "./components/DetailMember"
+import CreateLoan from "./components/CreateLoan"
 
 function App() {
 
@@ -28,6 +30,8 @@ function App() {
               <Route path="/member" element={<ShowMember />} />
               <Route path="/member/create" element={<CreateMember />} />
               <Route path="/member/edit/:id" element={<EditMember />} />
+              <Route path="/member/detail/:id" element={<DetailMember />} />
+              <Route path="/member/loan/create/:id" element={<CreateLoan />} />
             </Routes>
           </Col>
         </Row>

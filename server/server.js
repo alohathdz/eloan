@@ -18,6 +18,18 @@ const db = mysql.createConnection({
     database: "loan"
 })
 
+app.get('/', (req, res) => {
+    let ts = Date.now();
+
+    let date_time = new Date(ts);
+    let date = date_time.getDate();
+    let month = date_time.getMonth() + 1;
+    let year = date_time.getFullYear();
+    
+    console.log(year + "-" + month + "-" + date);
+    return res.json(year + "-" + month + "-" + date);
+})
+
 app.get('/member', (req, res) => {
     const sql = "SELECT * FROM member";
 
@@ -58,12 +70,43 @@ app.put('/member/update/:id', (req, res) => {
     })
 })
 
-app.delete('/member/:id', (req, res) => {
+app.delete('/member/delete/:id', (req, res) => {
     const sql = "DELETE FROM member WHERE member_id = ?";
     const id = req.params.id;
 
     db.query(sql, id, (err, result) => {
         if (err) return res.json("Error delete!");
+        return res.json(result);
+    })
+})
+
+app.get('/member/detail/:id', (req, res) => {
+    const sql = "SELECT * FROM detail WHERE member_id = ?";
+    const id = req.params.id;
+
+    db.query(sql, id, (err, result) => {
+        if (err) return res.json("Error select!");
+        return res.json(result);
+    })
+})
+
+app.post('/member/loan/create/:id', (req, res) => {
+    const sql = "INSERT INTO detail (amount, rate, start_date, member_id) VALUES(?, ?, ?, ?)";
+    const id = req.params.id;
+    const values = [
+        req.body.amount,
+        req.body.rate,
+    ];
+
+    let ts = Date.now();
+    let date_time = new Date(ts);
+    let date = date_time.getDate();
+    let month = date_time.getMonth() + 1;
+    let year = date_time.getFullYear();
+    const start_date = year + "-" + month + "-" + date;
+
+    db.query(sql, [values, start_date, id], (err, result) => {
+        if (err) return res.json("Error insert!");
         return res.json(result);
     })
 })
