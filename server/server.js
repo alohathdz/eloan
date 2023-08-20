@@ -112,3 +112,13 @@ app.post('/member/loan/create', (req, res) => {
         return res.json(result);
     })
 })
+
+app.delete('/loan/delete/:id', (req, res) => {
+    const sql = "DELETE FROM detail WHERE detail_id = ?";
+    const id = req.params.id;
+
+    db.query(sql, id, (err, result) => {
+        if (err) return res.json("Error delete!");
+        return res.json(result);
+    })
+})

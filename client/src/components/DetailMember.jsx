@@ -20,6 +20,34 @@ function ShowMember() {
         });
     }
 
+    const handleDelete = async (id) => {
+        const isConfirm = await Swal.fire({
+            title: "ยันยันการลบข้อมูล",
+            text: "เมื่อยันแล้ว ข้อมูลจะหายไป",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "ยืนยัน",
+            cancelButtonText: "ยกเลิก"
+        }).then((result) => {
+            return result.isConfirmed
+        })
+
+        if (!isConfirm) {
+            return;
+        }
+
+        await axios.delete(`http://localhost:8081/loan/delete/${id}`)
+            .then(res => {
+                Swal.fire({
+                    icon: "success",
+                    text: "Delete Loan Success!"
+                })
+                getDetails();
+            }).catch(err => console.log(err))
+    }
+
     return (
         <div className="container">
             <div className="row">
@@ -57,7 +85,10 @@ function ShowMember() {
                                                 <td>{row.amount}</td>
                                                 <td>{row.amount / 100 * row.rate}</td>
                                                 <td>{moment(row.start_date).locale('th').format('LL')}</td>
-                                                <td></td>
+                                                <td>
+                                                    <Link className='btn btn-sm btn-warning me-2'>แก้ไข</Link>
+                                                    <Button className='btn btn-sm btn-danger' onClick={e => handleDelete(row.detail_id)}>ลบ</Button>
+                                                </td>
                                             </tr>
                                         ))
                                     ) : (
