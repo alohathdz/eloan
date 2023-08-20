@@ -42,7 +42,8 @@ function CreateMember() {
                                             </Form.Group>
                                         </Col>
                                     </Row>
-                                    <Button variant="primary" className="mt-2" size="sm" block="block" type="submit">บันทึก</Button>
+                                    <Button className="btn btn-sm btn-primary me-2" type="submit">บันทึก</Button>
+                                    <Button className="btn btn-sm btn-danger" onClick={() => navigate(-1)}>ยกเลิก</Button>
                                 </Form>
                             </div>
                         </div>

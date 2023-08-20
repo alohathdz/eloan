@@ -22,23 +22,22 @@ function CreateLoan() {
         await axios.get(`http://localhost:8081/member/edit/${id}`)
             .then(res => {
                 setName(res.data[0].name)
-            })
+            }).catch(err => console.log(err))
     }
 
     const handleCreate = async (e) => {
         e.preventDefault();
 
-        await axios.post(`http://localhost:8081/member/loan/create`, {amount, rate, id})
-        .then(res => {
-            console.log(res);
-            Swal.fire({
-                icon: "success",
-                text: "Create Loan Successfully."
-            })
+        await axios.post(`http://localhost:8081/member/loan/create`, { amount, rate, id })
+            .then(res => {
+                console.log(res);
+                Swal.fire({
+                    icon: "success",
+                    text: "Create Loan Successfully."
+                })
 
-            navigate(`/member/detail/${id}`);
-        })
-        .catch(err => console.log(err))
+                navigate(`/member/detail/${id}`);
+            }).catch(err => console.log(err))
     }
 
     return (
@@ -63,7 +62,8 @@ function CreateLoan() {
                                             </Form.Group>
                                         </Col>
                                     </Row>
-                                    <Button variant="primary" className="mt-2" size="sm" block="block" type="submit">บันทึก</Button>
+                                    <Button className="btn btn-sm btn-primary me-2" type="submit">บันทึก</Button>
+                                    <Button className="btn btn-sm btn-danger" onClick={() => navigate(-1)}>ยกเลิก</Button>
                                 </Form>
                             </div>
                         </div>

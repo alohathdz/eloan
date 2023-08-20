@@ -8,16 +8,25 @@ import moment from 'moment'
 function ShowMember() {
 
     const [details, setDetails] = useState([]);
+    const [name, setName] = useState('');
     const { id } = useParams();
 
     useEffect(() => {
         getDetails();
+        getName();
     }, []);
 
     const getDetails = async () => {
         await axios.get(`http://localhost:8081/member/detail/${id}`).then(({ data }) => {
             setDetails(data);
         });
+    }
+
+    const getName = async () => {
+        await axios.get(`http://localhost:8081/member/edit/${id}`)
+        .then(res => {
+            setName(res.data[0].name);
+        })
     }
 
     const handleDelete = async (id) => {
@@ -53,7 +62,7 @@ function ShowMember() {
             <div className="row">
                 <div className="col-12">
                     <div className="float-start">
-                        <h4>รายการกู้</h4>
+                        <h4>รายการกู้ของ {name}</h4>
                     </div>
                     <div className="float-end">
                         <Link className="btn btn-sm btn-primary mb-2 me-1" to={`/member/loan/create/${id}`}>
@@ -86,7 +95,7 @@ function ShowMember() {
                                                 <td>{row.amount / 100 * row.rate}</td>
                                                 <td>{moment(row.start_date).locale('th').format('LL')}</td>
                                                 <td>
-                                                    <Link className='btn btn-sm btn-warning me-2'>แก้ไข</Link>
+                                                    <Link to={`/loan/edit/${row.detail_id}`} className='btn btn-sm btn-warning me-2'>แก้ไข</Link>
                                                     <Button className='btn btn-sm btn-danger' onClick={e => handleDelete(row.detail_id)}>ลบ</Button>
                                                 </td>
                                             </tr>

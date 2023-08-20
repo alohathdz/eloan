@@ -81,7 +81,7 @@ app.delete('/member/delete/:id', (req, res) => {
 })
 
 app.get('/member/detail/:id', (req, res) => {
-    const sql = "SELECT * FROM detail WHERE member_id = ?";
+    const sql = "SELECT detail_id, amount, rate, start_date FROM detail WHERE member_id = ?";
     const id = req.params.id;
 
     db.query(sql, id, (err, result) => {
@@ -119,6 +119,26 @@ app.delete('/loan/delete/:id', (req, res) => {
 
     db.query(sql, id, (err, result) => {
         if (err) return res.json("Error delete!");
+        return res.json(result);
+    })
+})
+
+app.get('/loan/edit/:id', (req, res) => {
+    const sql = "SELECT amount, rate, name FROM `detail` d INNER JOIN member m ON d.member_id = m.member_id WHERE detail_id = ?";
+    const id = req.params.id;
+
+    db.query(sql, id, (err, result) => {
+        if (err) return res.json("Error edit!");
+        return res.json(result);
+    })
+})
+
+app.put('/loan/update/:id', (req, res) => {
+    const sql = "UPDATE detail SET amount = ?, rate = ? WHERE detail_id = ?";
+    const id = req.params.id;
+
+    db.query(sql, [req.body.amount, req.body.rate, id], (err, result) => {
+        if (err) return res.json("Eror update!");
         return res.json(result);
     })
 })

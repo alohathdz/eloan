@@ -4,33 +4,37 @@ import axios from 'axios'
 import Swal from 'sweetalert2'
 import { useNavigate, useParams } from 'react-router-dom'
 
-function EditMember() {
+function EditLoan() {
 
     const { id } = useParams();
-    const [name, setName] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
-        getMember();
+        getLoans();
     }, [])
 
-    const getMember = async () => {
-        await axios.get(`http://localhost:8081/member/edit/${id}`)
-            .then(res => {
-                setName(res.data[0].name)
-            }).catch(err => console.log(err))
+    const getLoans = async () => {
+        await axios.get(`http://localhost:8081/loan/edit/${id}`)
+        .then(res => {
+            setValues({...values, amount: res.data[0].amount, rate: res.data[0].rate, name: res.data[0].name})
+        }).catch(err => console.log(err))
     }
+    
+    const [values, setValues] = useState({
+        amount: '',
+        rate: '',
+    });
 
     const handleUpdate = async (e) => {
         e.preventDefault();
 
-        await axios.put(`http://localhost:8081/member/update/${id}`, {name})
+        await axios.put(`http://localhost:8081/loan/update/${id}`, values)
             .then(res => {
                 Swal.fire({
                     icon: "success",
-                    text: "Update successfully!"
+                    text: "Update Loan Success!"
                 })
-                navigate("/member")
+                navigate(-1)
             }).catch(err => console.log(err))
     }
 
@@ -40,15 +44,19 @@ function EditMember() {
                 <div className="col-12 col-sm-12 col-md-6">
                     <div className="card">
                         <div className="card-body">
-                            <h4 className="card-title">เพิ่มข้อมูลผู้กู้</h4>
+                            <h4 className="card-title">แก้ไขข้อมูลการกู้ของ {values.name}</h4>
                             <hr />
                             <div className="form-wrapper">
                                 <Form onSubmit={handleUpdate}>
                                     <Row>
                                         <Col>
-                                            <Form.Group controlId="Name">
-                                                <Form.Label>ชื่อ</Form.Label>
-                                                <Form.Control type="text" value={name} onChange={e => setName(e.target.value)} />
+                                            <Form.Group controlId="Amount" className='mb-3'>
+                                                <Form.Label>ยอดกู้</Form.Label>
+                                                <Form.Control type="text" value={values.amount} onChange={e => setValues({...values, amount: e.target.value})} />
+                                            </Form.Group>
+                                            <Form.Group controlId="Rate" className='mb-3'>
+                                                <Form.Label>อัตราดอกเบี้ย</Form.Label>
+                                                <Form.Control type="text" value={values.rate} onChange={e => setValues({...values, rate: e.target.value})} />
                                             </Form.Group>
                                         </Col>
                                     </Row>
@@ -64,4 +72,4 @@ function EditMember() {
     )
 }
 
-export default EditMember
+export default EditLoan
