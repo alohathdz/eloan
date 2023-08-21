@@ -7,7 +7,7 @@ import Home from './components/Home'
 import CreateMember from './components/CreateMember'
 import ShowMember from "./components/ShowMember"
 import EditMember from "./components/EditMember"
-import DetailMember from "./components/DetailMember"
+import DetailLoan from "./components/DetailLoan"
 import CreateLoan from "./components/CreateLoan"
 import EditLoan from "./components/EditLoan"
 import PayLoan from "./components/PayLoan"
@@ -32,7 +32,7 @@ function App() {
               <Route path="/member" element={<ShowMember />} />
               <Route path="/member/create" element={<CreateMember />} />
               <Route path="/member/edit/:id" element={<EditMember />} />
-              <Route path="/member/detail/:id" element={<DetailMember />} />
+              <Route path="/member/loan/:id" element={<DetailLoan />} />
               <Route path="/member/loan/create/:id" element={<CreateLoan />} />
               <Route path="/loan/edit/:id" element={<EditLoan />} />
               <Route path="/loan/pay/:id" element={<PayLoan />} />

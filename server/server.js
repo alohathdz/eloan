@@ -86,8 +86,8 @@ app.delete('/member/delete/:id', (req, res) => {
     })
 })
 
-app.get('/member/detail/:id', (req, res) => {
-    const sql = "SELECT detail_id, amount, rate, start_date, pay_date FROM detail WHERE member_id = ?";
+app.get('/member/loan/:id', (req, res) => {
+    const sql = "SELECT loan_id, amount, rate, start_date, pay_date FROM loan WHERE member_id = ?";
     const id = req.params.id;
 
     db.query(sql, id, (err, result) => {
@@ -97,7 +97,7 @@ app.get('/member/detail/:id', (req, res) => {
 })
 
 app.post('/member/loan/create', (req, res) => {
-    const sql = "INSERT INTO detail (amount, rate, start_date, pay_date, member_id) VALUES(?)";
+    const sql = "INSERT INTO loan (amount, rate, start_date, pay_date, member_id) VALUES(?)";
 
     let date_time = new Date(req.body.start_date);
     let date = date_time.getDate();
@@ -126,7 +126,7 @@ app.post('/member/loan/create', (req, res) => {
 })
 
 app.delete('/loan/delete/:id', (req, res) => {
-    const sql = "DELETE FROM detail WHERE detail_id = ?";
+    const sql = "DELETE FROM loan WHERE loan_id = ?";
     const id = req.params.id;
 
     db.query(sql, id, (err, result) => {
@@ -136,7 +136,7 @@ app.delete('/loan/delete/:id', (req, res) => {
 })
 
 app.get('/loan/edit/:id', (req, res) => {
-    const sql = "SELECT amount, rate, start_date, name FROM `detail` d INNER JOIN member m ON d.member_id = m.member_id WHERE detail_id = ?";
+    const sql = "SELECT amount, rate, start_date, name FROM loan d INNER JOIN member m ON d.member_id = m.member_id WHERE loan_id = ?";
     const id = req.params.id;
 
     db.query(sql, id, (err, result) => {
@@ -146,10 +146,30 @@ app.get('/loan/edit/:id', (req, res) => {
 })
 
 app.put('/loan/update/:id', (req, res) => {
-    const sql = "UPDATE detail SET amount = ?, rate = ?, start_date = ? WHERE detail_id = ?";
+    const sql = "UPDATE loan SET amount = ?, rate = ?, start_date = ? WHERE loan_id = ?";
     const id = req.params.id;
 
     db.query(sql, [req.body.amount, req.body.rate, req.body.start_date, id], (err, result) => {
+        if (err) return res.json(err);
+        return res.json(result);
+    })
+})
+
+app.post('/payloan/create', (req, res) => {
+    const sql = "INSERT INTO payment (loan, interest, pay_date, loan_id) VALUES(?)";
+    let date_time = new Date(req.body.pay_date);
+    let date = date_time.getDate();
+    let month = date_time.getMonth() + 1;
+    let year = date_time.getFullYear();
+    let pay_date = year + "-" + month + "-" + date;
+    const values = [
+        req.body.loan,
+        req.body.interest,
+        pay_date,
+        req.body.id
+    ]
+
+    db.query(sql, [values], (err, result) => {
         if (err) return res.json(err);
         return res.json(result);
     })

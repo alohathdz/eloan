@@ -80,7 +80,7 @@ function ShowMember() {
                                                 <td>{row.member_id}</td>
                                                 <td>{row.name}</td>
                                                 <td>
-                                                    <Link to={`/member/detail/${row.member_id}`} className='btn btn-info btn-sm'>การกู้</Link>
+                                                    <Link to={`/member/loan/${row.member_id}`} className='btn btn-info btn-sm'>การกู้</Link>
                                                     <Link to={`/member/edit/${row.member_id}`} className='btn btn-sm btn-warning mx-2'>แก้ไข</Link>
                                                     <Button className='btn btn-danger btn-sm' onClick={e => handleDelete(row.member_id)}>ลบ</Button>
                                                 </td>

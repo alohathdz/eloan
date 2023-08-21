@@ -12,7 +12,8 @@ function PayLoan() {
     const [values, setValues] = useState({
         loan: '',
         interest: '',
-        pay_date: ''
+        pay_date: '',
+        id: id
     });
 
     useEffect(() => {
@@ -21,9 +22,24 @@ function PayLoan() {
 
     const getName = async () => {
         await axios.get('http://localhost:8081/loan/edit/' + id)
-        .then(res => {
-            setName(res.data[0].name);
-        }).catch(err => console.log(err))
+            .then(res => {
+                setName(res.data[0].name);
+            }).catch(err => console.log(err))
+    }
+
+    const handleCreate = async (e) => {
+        e.preventDefault();
+
+        await axios.post('http://localhost:8081/payloan/create', values)
+            .then(res => {
+                console.log(res);
+                Swal.fire({
+                    icon: "success",
+                    text: "Pay Loan Successfully."
+                })
+
+                navigate(-1);
+            }).catch(err => console.log(err))
     }
 
     return (
@@ -35,7 +51,7 @@ function PayLoan() {
                             <h4 className="card-title">ชำระเงินกู้ของ <font color="red">{name}</font></h4>
                             <hr />
                             <div className="form-wrapper">
-                                <Form>
+                                <Form onSubmit={handleCreate}>
                                     <Row>
                                         <Col>
                                             <Form.Group controlId="Loan" className='mb-3'>

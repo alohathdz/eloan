@@ -5,20 +5,20 @@ import axios from 'axios'
 import Swal from 'sweetalert2'
 import moment from 'moment/min/moment-with-locales'
 
-function ShowMember() {
+function DetailLoan() {
 
-    const [details, setDetails] = useState([]);
+    const [loans, setLoans] = useState([]);
     const [name, setName] = useState('');
     const { id } = useParams();
 
     useEffect(() => {
-        getDetails();
+        getLoans();
         getName();
     }, []);
 
-    const getDetails = async () => {
-        await axios.get(`http://localhost:8081/member/detail/${id}`).then(({ data }) => {
-            setDetails(data);
+    const getLoans = async () => {
+        await axios.get(`http://localhost:8081/member/loan/${id}`).then(({ data }) => {
+            setLoans(data);
         });
     }
 
@@ -53,7 +53,7 @@ function ShowMember() {
                     icon: "success",
                     text: "Delete Loan Success!"
                 })
-                getDetails();
+                getLoans();
             }).catch(err => console.log(err))
     }
 
@@ -84,22 +84,26 @@ function ShowMember() {
                                         <th>ดอกเบี้ย</th>
                                         <th>วันที่กู้</th>
                                         <th>วันชำระยอด</th>
+                                        <th>ยอดชำระเงินต้น</th>
+                                        <th>ยอดชำระดอกเบี้ย</th>
                                         <th>จัดการ</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {details.length > 0 ? (
-                                        details.map((row, key) => (
+                                    {loans.length > 0 ? (
+                                        loans.map((row, key) => (
                                             <tr key={key}>
-                                                <td>{row.detail_id}</td>
+                                                <td>{row.loan_id}</td>
                                                 <td>{row.amount}</td>
                                                 <td>{row.amount / 100 * row.rate}</td>
                                                 <td>{moment(row.start_date).locale('th').add(543, 'years').format('ll')}</td>
                                                 <td>{moment(row.pay_date).locale('th').add(543, 'years').format('ll')}</td>
+                                                <td></td>
+                                                <td></td>
                                                 <td>
-                                                    <Link to={`/loan/pay/${row.detail_id}`} className='btn btn-sm btn-success me-2'>ชำระ</Link>
-                                                    <Link to={`/loan/edit/${row.detail_id}`} className='btn btn-sm btn-warning me-2'>แก้ไข</Link>
-                                                    <Button className='btn btn-sm btn-danger' onClick={e => handleDelete(row.detail_id)}>ลบ</Button>
+                                                    <Link to={`/loan/pay/${row.loan_id}`} className='btn btn-sm btn-success me-2'>ชำระ</Link>
+                                                    <Link to={`/loan/edit/${row.loan_id}`} className='btn btn-sm btn-warning me-2'>แก้ไข</Link>
+                                                    <Button className='btn btn-sm btn-danger' onClick={e => handleDelete(row.loan_id)}>ลบ</Button>
                                                 </td>
                                             </tr>
                                         ))
@@ -118,4 +122,4 @@ function ShowMember() {
     )
 }
 
-export default ShowMember
+export default DetailLoan
