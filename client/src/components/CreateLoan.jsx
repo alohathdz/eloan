@@ -11,7 +11,6 @@ function CreateLoan() {
 
     const [amount, setAmount] = useState('');
     const [rate, setRate] = useState('');
-    const [start_date, setStartDate] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {

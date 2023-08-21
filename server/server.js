@@ -34,7 +34,7 @@ app.get('/member', (req, res) => {
     const sql = "SELECT * FROM member";
 
     db.query(sql, (err, result) => {
-        if (err) return res.json("Error select!");
+        if (err) return res.json(err);
         return res.json(result);
     })
 })
@@ -44,7 +44,7 @@ app.post('/member/create', (req, res) => {
     const values = req.body.name;
 
     db.query(sql, [values], (err, result) => {
-        if (err) return res.json("Error insert!");
+        if (err) return res.json(err);
         return res.json(result);
     })
 })
@@ -54,7 +54,7 @@ app.get('/member/edit/:id', (req, res) => {
     const id = req.params.id;
 
     db.query(sql, id, (err, result) => {
-        if (err) return res.json("Error edit!");
+        if (err) return res.json(err);
         return res.json(result);
     })
 })
@@ -65,7 +65,7 @@ app.put('/member/update/:id', (req, res) => {
     const values = req.body.name;
 
     db.query(sql, [values, id], (err, result) => {
-        if (err) return res.json("Eror update!");
+        if (err) return res.json(err);
         return res.json(result);
     })
 })
@@ -75,7 +75,7 @@ app.delete('/member/delete/:id', (req, res) => {
     const id = req.params.id;
 
     db.query(sql, id, (err, result) => {
-        if (err) return res.json("Error delete!");
+        if (err) return res.json(err);
         return res.json(result);
     })
 })
@@ -85,7 +85,7 @@ app.get('/member/detail/:id', (req, res) => {
     const id = req.params.id;
 
     db.query(sql, id, (err, result) => {
-        if (err) return res.json("Error select!");
+        if (err) return res.json(err);
         return res.json(result);
     })
 })
@@ -118,7 +118,7 @@ app.delete('/loan/delete/:id', (req, res) => {
     const id = req.params.id;
 
     db.query(sql, id, (err, result) => {
-        if (err) return res.json("Error delete!");
+        if (err) return res.json(err);
         return res.json(result);
     })
 })
@@ -128,7 +128,7 @@ app.get('/loan/edit/:id', (req, res) => {
     const id = req.params.id;
 
     db.query(sql, id, (err, result) => {
-        if (err) return res.json("Error edit!");
+        if (err) return res.json(err);
         return res.json(result);
     })
 })
@@ -138,7 +138,7 @@ app.put('/loan/update/:id', (req, res) => {
     const id = req.params.id;
 
     db.query(sql, [req.body.amount, req.body.rate, id], (err, result) => {
-        if (err) return res.json("Eror update!");
+        if (err) return res.json(err);
         return res.json(result);
     })
 })
