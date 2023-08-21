@@ -87,7 +87,7 @@ app.delete('/member/delete/:id', (req, res) => {
 })
 
 app.get('/member/detail/:id', (req, res) => {
-    const sql = "SELECT detail_id, amount, rate, start_date FROM detail WHERE member_id = ?";
+    const sql = "SELECT detail_id, amount, rate, start_date, pay_date FROM detail WHERE member_id = ?";
     const id = req.params.id;
 
     db.query(sql, id, (err, result) => {

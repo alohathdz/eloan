@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { Button } from 'react-bootstrap'
 import axios from 'axios'
 import Swal from 'sweetalert2'
-import moment from 'moment'
+import moment from 'moment/min/moment-with-locales'
 
 function ShowMember() {
 
@@ -83,6 +83,7 @@ function ShowMember() {
                                         <th>ยอดกู้</th>
                                         <th>ดอกเบี้ย</th>
                                         <th>วันที่กู้</th>
+                                        <th>วันชำระยอด</th>
                                         <th>จัดการ</th>
                                     </tr>
                                 </thead>
@@ -93,7 +94,8 @@ function ShowMember() {
                                                 <td>{row.detail_id}</td>
                                                 <td>{row.amount}</td>
                                                 <td>{row.amount / 100 * row.rate}</td>
-                                                <td>{moment(row.start_date).locale('th').format('LL')}</td>
+                                                <td>{moment(row.start_date).locale('th').add(543, 'years').format('ll')}</td>
+                                                <td>{moment(row.pay_date).locale('th').add(543, 'years').format('ll')}</td>
                                                 <td>
                                                     <Link to={`/loan/edit/${row.detail_id}`} className='btn btn-sm btn-warning me-2'>แก้ไข</Link>
                                                     <Button className='btn btn-sm btn-danger' onClick={e => handleDelete(row.detail_id)}>ลบ</Button>
