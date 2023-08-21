@@ -35,7 +35,7 @@ function PayLoan() {
                 console.log(res);
                 Swal.fire({
                     icon: "success",
-                    text: "Pay Loan Successfully."
+                    text: "การชำระยอด สำเร็จ!"
                 })
 
                 navigate(-1);
