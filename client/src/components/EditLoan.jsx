@@ -3,6 +3,7 @@ import { Form, Button, Row, Col } from 'react-bootstrap'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import { useNavigate, useParams } from 'react-router-dom'
+import moment from 'moment'
 
 function EditLoan() {
 
@@ -16,13 +17,14 @@ function EditLoan() {
     const getLoans = async () => {
         await axios.get(`http://localhost:8081/loan/edit/${id}`)
         .then(res => {
-            setValues({...values, amount: res.data[0].amount, rate: res.data[0].rate, name: res.data[0].name})
+            setValues({...values, amount: res.data[0].amount, rate: res.data[0].rate, start_date: res.data[0].start_date, name: res.data[0].name})
         }).catch(err => console.log(err))
     }
     
     const [values, setValues] = useState({
         amount: '',
         rate: '',
+        start_date: ''
     });
 
     const handleUpdate = async (e) => {
@@ -57,6 +59,10 @@ function EditLoan() {
                                             <Form.Group controlId="Rate" className='mb-3'>
                                                 <Form.Label>อัตราดอกเบี้ย</Form.Label>
                                                 <Form.Control type="text" value={values.rate} onChange={e => setValues({...values, rate: e.target.value})} />
+                                            </Form.Group>
+                                            <Form.Group controlId="startDate" className='mb-3'>
+                                                <Form.Label>วันที่กู้</Form.Label>
+                                                <Form.Control type="date" value={moment(values.start_date).format('YYYY-MM-DD')} onChange={e => setValues({...values, start_date: e.target.value})} />
                                             </Form.Group>
                                         </Col>
                                     </Row>

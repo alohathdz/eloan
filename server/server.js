@@ -123,7 +123,7 @@ app.delete('/loan/delete/:id', (req, res) => {
 })
 
 app.get('/loan/edit/:id', (req, res) => {
-    const sql = "SELECT amount, rate, name FROM `detail` d INNER JOIN member m ON d.member_id = m.member_id WHERE detail_id = ?";
+    const sql = "SELECT amount, rate, start_date, name FROM `detail` d INNER JOIN member m ON d.member_id = m.member_id WHERE detail_id = ?";
     const id = req.params.id;
 
     db.query(sql, id, (err, result) => {
@@ -133,10 +133,10 @@ app.get('/loan/edit/:id', (req, res) => {
 })
 
 app.put('/loan/update/:id', (req, res) => {
-    const sql = "UPDATE detail SET amount = ?, rate = ? WHERE detail_id = ?";
+    const sql = "UPDATE detail SET amount = ?, rate = ?, start_date = ? WHERE detail_id = ?";
     const id = req.params.id;
 
-    db.query(sql, [req.body.amount, req.body.rate, id], (err, result) => {
+    db.query(sql, [req.body.amount, req.body.rate, req.body.start_date, id], (err, result) => {
         if (err) return res.json(err);
         return res.json(result);
     })
