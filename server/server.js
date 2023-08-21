@@ -174,3 +174,12 @@ app.post('/payloan/create', (req, res) => {
         return res.json(result);
     })
 })
+
+app.get('/DetailLoan/pay/:id', (req, res) => {
+    const sql = "SELECT SUM(loan) AS loan, SUM(interest) AS interest FROM payment p INNER JOIN loan l ON p.loan_id = l.loan_id WHERE p.loan_id = ?";
+
+    db.query(sql, req.params.id, (err, result) => {
+        if (err) return res.json(err);
+        return res.json(result);
+    })
+})

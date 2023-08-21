@@ -8,6 +8,8 @@ import moment from 'moment/min/moment-with-locales'
 function DetailLoan() {
 
     const [loans, setLoans] = useState([]);
+    const [payLoan, setPayLoan] = useState('');
+    const [payInterest, setPayInterest] = useState([]);
     const [name, setName] = useState('');
     const { id } = useParams();
 
@@ -19,13 +21,21 @@ function DetailLoan() {
     const getLoans = async () => {
         await axios.get(`http://localhost:8081/member/loan/${id}`).then(({ data }) => {
             setLoans(data);
-        });
+        })
     }
 
     const getName = async () => {
         await axios.get(`http://localhost:8081/member/edit/${id}`)
         .then(res => {
             setName(res.data[0].name);
+        })
+    }
+
+    const getPays = async () => {
+        await axios.get('http://localhost:8081/DetailLoan/pay' + id)
+        .then(res => {
+            setPayLoan(res.data[0].loan);
+            setPayInterest(res.data[0].interest);
         })
     }
 
