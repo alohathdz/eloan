@@ -10,6 +10,7 @@ import EditMember from "./components/EditMember"
 import DetailMember from "./components/DetailMember"
 import CreateLoan from "./components/CreateLoan"
 import EditLoan from "./components/EditLoan"
+import PayLoan from "./components/PayLoan"
 
 function App() {
 
@@ -34,6 +35,7 @@ function App() {
               <Route path="/member/detail/:id" element={<DetailMember />} />
               <Route path="/member/loan/create/:id" element={<CreateLoan />} />
               <Route path="/loan/edit/:id" element={<EditLoan />} />
+              <Route path="/loan/pay/:id" element={<PayLoan />} />
             </Routes>
           </Col>
         </Row>
