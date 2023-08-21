@@ -21,13 +21,19 @@ const db = mysql.createConnection({
 app.get('/', (req, res) => {
     let ts = Date.now();
 
-    let date_time = new Date(ts);
+    let date_time = new Date(Date.now());
     let date = date_time.getDate();
     let month = date_time.getMonth() + 1;
     let year = date_time.getFullYear();
-    
-    console.log(year + "-" + month + "-" + date);
-    return res.json(year + "-" + month + "-" + date);
+    let start_date = year + "-" + month + "-" + date;
+
+    let paydate_time = new Date(date_time.setDate(date_time.getDate() + 31));
+    let paydate = paydate_time.getDate();
+    let paymonth = paydate_time.getMonth() + 1;
+    let payyear = paydate_time.getFullYear();
+    let pay_date = payyear + "-" + paymonth + "-" + paydate;
+
+    return res.json(start_date + ' กับ ' + pay_date);
 })
 
 app.get('/member', (req, res) => {
@@ -91,7 +97,7 @@ app.get('/member/detail/:id', (req, res) => {
 })
 
 app.post('/member/loan/create', (req, res) => {
-    const sql = "INSERT INTO detail (amount, rate, start_date, member_id) VALUES(?)";
+    const sql = "INSERT INTO detail (amount, rate, start_date, pay_date, member_id) VALUES(?)";
 
     let date_time = new Date(req.body.start_date);
     let date = date_time.getDate();
@@ -99,10 +105,17 @@ app.post('/member/loan/create', (req, res) => {
     let year = date_time.getFullYear();
     let start_date = year + "-" + month + "-" + date;
 
+    let paydate_time = new Date(date_time.setDate(date_time.getDate() + 31));
+    let paydate = paydate_time.getDate();
+    let paymonth = paydate_time.getMonth() + 1;
+    let payyear = paydate_time.getFullYear();
+    let pay_date = payyear + "-" + paymonth + "-" + paydate;
+
     const values = [
         req.body.amount,
         req.body.rate,
         start_date,
+        pay_date,
         req.body.id,
     ];
 
