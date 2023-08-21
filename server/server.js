@@ -105,7 +105,7 @@ app.post('/member/loan/create', (req, res) => {
     let year = date_time.getFullYear();
     let start_date = year + "-" + month + "-" + date;
 
-    let paydate_time = new Date(date_time.setDate(date_time.getDate() + 31));
+    let paydate_time = new Date(date_time.setDate(date_time.getDate() + 30));
     let paydate = paydate_time.getDate();
     let paymonth = paydate_time.getMonth() + 1;
     let payyear = paydate_time.getFullYear();
