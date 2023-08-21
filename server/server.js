@@ -93,8 +93,7 @@ app.get('/member/detail/:id', (req, res) => {
 app.post('/member/loan/create', (req, res) => {
     const sql = "INSERT INTO detail (amount, rate, start_date, member_id) VALUES(?)";
 
-    let ts = Date.now();
-    let date_time = new Date(ts);
+    let date_time = new Date(req.body.start_date);
     let date = date_time.getDate();
     let month = date_time.getMonth() + 1;
     let year = date_time.getFullYear();
