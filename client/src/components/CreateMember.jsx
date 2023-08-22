@@ -12,7 +12,7 @@ function CreateMember() {
     const handleCreate = async (e) => {
         e.preventDefault();
 
-        await axios.post(`http://localhost:8081/member/create`, {name})
+        await axios.post(`http://localhost:8081/member/create`, { name })
             .then(res => {
                 Swal.fire({
                     icon: "success",
@@ -36,7 +36,7 @@ function CreateMember() {
                                 <Form onSubmit={handleCreate}>
                                     <Row>
                                         <Col>
-                                            <Form.Group controlId="Name">
+                                            <Form.Group controlId="Name" className='mb-3'>
                                                 <Form.Label>ชื่อ</Form.Label>
                                                 <Form.Control type="text" onChange={e => setName(e.target.value)} />
                                             </Form.Group>
