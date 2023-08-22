@@ -38,7 +38,7 @@ function CreateLoan() {
                     text: "Create Loan Successfully."
                 })
 
-                navigate(`/member/${id}`);
+                navigate(-1);
             }).catch(err => console.log(err))
     }
 

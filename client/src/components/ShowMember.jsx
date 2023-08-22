@@ -7,6 +7,7 @@ import Swal from 'sweetalert2'
 function ShowMember() {
 
     const [members, setMembers] = useState([]);
+    let i = 0;
 
     useEffect(() => {
         getMembers();
@@ -70,6 +71,8 @@ function ShowMember() {
                                     <tr>
                                         <th>ลำดับ</th>
                                         <th>ชื่อ</th>
+                                        <th>เงินต้น</th>
+                                        <th>ดอกเบี้ย</th>
                                         <th>จัดการ</th>
                                     </tr>
                                 </thead>
@@ -77,8 +80,10 @@ function ShowMember() {
                                     {members.length > 0 ? (
                                         members.map((row, key) => (
                                             <tr key={key}>
-                                                <td>{row.member_id}</td>
+                                                <td>{++i}</td>
                                                 <td>{row.name}</td>
+                                                <td>{row.amount - row.sum}</td>
+                                                <td>{row.interest}</td>
                                                 <td>
                                                     <Link to={`/member/loan/${row.member_id}`} className='btn btn-info btn-sm'>การกู้</Link>
                                                     <Link to={`/member/edit/${row.member_id}`} className='btn btn-sm btn-warning mx-2'>แก้ไข</Link>

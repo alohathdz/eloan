@@ -37,7 +37,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/member', (req, res) => {
-    const sql = "SELECT * FROM member";
+    const sql = "SELECT m.member_id, name, (SELECT SUM(amount) FROM loan WHERE member_id = m.member_id) AS amount, (SELECT SUM(amount/100*10) FROM loan WHERE member_id = m.member_id) AS interest, (SELECT SUM(loan) FROM payment p WHERE p.loan_id IN(SELECT loan_id FROM loan l WHERE l.member_id = m.member_id)) AS sum FROM member m";
 
     db.query(sql, (err, result) => {
         if (err) return res.json(err);
@@ -170,9 +170,12 @@ app.post('/payloan/create', (req, res) => {
     ]
 
     db.query(sql, [values], (err, result) => {
+        db.query("UPDATE loan SET amount = amount - ? WHERE loan_id = ?", [req.body.loan, req.body.id], (err, result) => {
+            if (err) return res.json(err);
+        });
         if (err) return res.json(err);
         return res.json(result);
-    })
+    });
 })
 
 app.get('/DetailLoan/pay/:id', (req, res) => {

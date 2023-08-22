@@ -82,6 +82,7 @@ function DetailLoan() {
                                     <tr>
                                         <th>ลำดับ</th>
                                         <th>ยอดกู้</th>
+                                        <th>ยอดคงเหลือ</th>
                                         <th>ดอกเบี้ย</th>
                                         <th>วันที่กู้</th>
                                         <th>วันชำระยอด</th>
@@ -96,7 +97,8 @@ function DetailLoan() {
                                             <tr key={key}>
                                                 <td>{++i}</td>
                                                 <td>{row.amount}</td>
-                                                <td>{row.amount / 100 * row.rate}</td>
+                                                <td>{row.amount - row.loan}</td>
+                                                <td>{(row.amount - row.loan) / 100 * row.rate}</td>
                                                 <td>{moment(row.start_date).locale('th').add(543, 'years').format('ll')}</td>
                                                 <td>{moment(row.pay_date).locale('th').add(543, 'years').format('ll')}</td>
                                                 <td>
