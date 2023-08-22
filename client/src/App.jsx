@@ -32,8 +32,8 @@ function App() {
               <Route path="/member" element={<ShowMember />} />
               <Route path="/member/create" element={<CreateMember />} />
               <Route path="/member/edit/:id" element={<EditMember />} />
-              <Route path="/member/loan/:id" element={<DetailLoan />} />
-              <Route path="/member/loan/create/:id" element={<CreateLoan />} />
+              <Route path="/loan/:id" element={<DetailLoan />} />
+              <Route path="/loan/create/:id" element={<CreateLoan />} />
               <Route path="/loan/edit/:id" element={<EditLoan />} />
               <Route path="/loan/pay/:id" element={<PayLoan />} />
             </Routes>

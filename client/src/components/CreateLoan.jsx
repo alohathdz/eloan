@@ -7,39 +7,25 @@ import { useNavigate, useParams } from 'react-router-dom'
 function CreateLoan() {
 
     const { id } = useParams();
-    const [name, setName] = useState('');
+    const navigate = useNavigate();
     const [values, setValues] = useState({
         amount: '',
         rate: '',
         start_date: '',
         id: id
     });
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        getMember();
-    }, [])
-
-    const getMember = async () => {
-        await axios.get(`http://localhost:8081/member/edit/${id}`)
-            .then(res => {
-                setName(res.data[0].name)
-            }).catch(err => console.log(err))
-    }
 
     const handleCreate = async (e) => {
         e.preventDefault();
 
-        await axios.post(`http://localhost:8081/member/loan/create`, values)
-            .then(res => {
-                console.log(res);
-                Swal.fire({
-                    icon: "success",
-                    text: "Create Loan Successfully."
-                })
-
-                navigate(-1);
-            }).catch(err => console.log(err))
+        await axios.post('http://localhost:8081/loan/create', values)
+        .then(res => {
+            Swal.fire({
+                icon: "success",
+                text: "Create Loan Successfully."
+            });
+            navigate(-1);
+        }).catch(err => console.log(err))
     }
 
     return (

@@ -18,7 +18,7 @@ function DetailLoan() {
     }, []);
 
     const getLoans = async () => {
-        await axios.get(`http://localhost:8081/member/loan/${id}`).then(({ data }) => {
+        await axios.get(`http://localhost:8081/loan/${id}`).then(({ data }) => {
             setLoans(data);
         })
     }
@@ -66,7 +66,7 @@ function DetailLoan() {
                         <h4>รายการกู้ของ {name}</h4>
                     </div>
                     <div className="float-end">
-                        <Link className="btn btn-sm btn-primary mb-2 me-1" to={`/member/loan/create/${id}`}>
+                        <Link className="btn btn-sm btn-primary mb-2 me-1" to={`/loan/create/${id}`}>
                             เพิ่มยอดกู้
                         </Link>
                         <Link className="btn btn-sm btn-secondary mb-2" to={"/member"}>

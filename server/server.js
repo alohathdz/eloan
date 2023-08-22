@@ -86,7 +86,7 @@ app.delete('/member/delete/:id', (req, res) => {
     })
 })
 
-app.get('/member/loan/:id', (req, res) => {
+app.get('/loan/:id', (req, res) => {
     const sql = "SELECT loan_id, amount, rate, start_date, pay_date, (SELECT SUM(loan) FROM payment WHERE loan_id = l.loan_id) AS loan, (SELECT SUM(interest) FROM payment WHERE loan_id = l.loan_id) AS interest FROM loan l WHERE member_id = ?";
     const id = req.params.id;
 
@@ -96,8 +96,10 @@ app.get('/member/loan/:id', (req, res) => {
     })
 })
 
-app.post('/member/loan/create', (req, res) => {
-    const sql = "INSERT INTO loan (amount, rate, start_date, pay_date, member_id) VALUES(?)";
+app.post('/loan/create', (req, res) => {
+    const sql = "INSERT INTO loan (amount, rate, interest, start_date, pay_date, member_id) VALUES(?)";
+
+    let interest = req.body.amount*(req.body.rate/100);
 
     let date_time = new Date(req.body.start_date);
     let date = date_time.getDate();
@@ -114,6 +116,7 @@ app.post('/member/loan/create', (req, res) => {
     const values = [
         req.body.amount,
         req.body.rate,
+        interest, 
         start_date,
         pay_date,
         req.body.id,
