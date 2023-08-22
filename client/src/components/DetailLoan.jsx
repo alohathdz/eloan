@@ -8,9 +8,8 @@ import moment from 'moment/min/moment-with-locales'
 function DetailLoan() {
 
     const [loans, setLoans] = useState([]);
-    const [payLoan, setPayLoan] = useState('');
-    const [payInterest, setPayInterest] = useState([]);
     const [name, setName] = useState('');
+    let i = 0;
     const { id } = useParams();
 
     useEffect(() => {
@@ -26,17 +25,9 @@ function DetailLoan() {
 
     const getName = async () => {
         await axios.get(`http://localhost:8081/member/edit/${id}`)
-        .then(res => {
-            setName(res.data[0].name);
-        })
-    }
-
-    const getPays = async () => {
-        await axios.get('http://localhost:8081/DetailLoan/pay' + id)
-        .then(res => {
-            setPayLoan(res.data[0].loan);
-            setPayInterest(res.data[0].interest);
-        })
+            .then(res => {
+                setName(res.data[0].name);
+            })
     }
 
     const handleDelete = async (id) => {
@@ -103,13 +94,15 @@ function DetailLoan() {
                                     {loans.length > 0 ? (
                                         loans.map((row, key) => (
                                             <tr key={key}>
-                                                <td>{row.loan_id}</td>
+                                                <td>{++i}</td>
                                                 <td>{row.amount}</td>
                                                 <td>{row.amount / 100 * row.rate}</td>
                                                 <td>{moment(row.start_date).locale('th').add(543, 'years').format('ll')}</td>
                                                 <td>{moment(row.pay_date).locale('th').add(543, 'years').format('ll')}</td>
-                                                <td></td>
-                                                <td></td>
+                                                <td>
+                                                    {row.loan ? (row.loan) : ("ยังไม่มียอดชำระ")}
+                                                </td>
+                                                <td>{row.interest ? (row.interest) : ("ยังไม่มียอดชำระ")}</td>
                                                 <td>
                                                     <Link to={`/loan/pay/${row.loan_id}`} className='btn btn-sm btn-success me-2'>ชำระ</Link>
                                                     <Link to={`/loan/edit/${row.loan_id}`} className='btn btn-sm btn-warning me-2'>แก้ไข</Link>

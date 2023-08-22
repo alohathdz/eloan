@@ -87,7 +87,7 @@ app.delete('/member/delete/:id', (req, res) => {
 })
 
 app.get('/member/loan/:id', (req, res) => {
-    const sql = "SELECT loan_id, amount, rate, start_date, pay_date FROM loan WHERE member_id = ?";
+    const sql = "SELECT loan_id, amount, rate, start_date, pay_date, (SELECT SUM(loan) FROM payment WHERE loan_id = l.loan_id) AS loan, (SELECT SUM(interest) FROM payment WHERE loan_id = l.loan_id) AS interest FROM loan l WHERE member_id = ?";
     const id = req.params.id;
 
     db.query(sql, id, (err, result) => {
