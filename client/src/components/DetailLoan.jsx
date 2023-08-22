@@ -114,7 +114,7 @@ function DetailLoan() {
                                         ))
                                     ) : (
                                         <tr>
-                                            <td colSpan="5">ไม่พบข้อมูลการกู้</td>
+                                            <td colSpan="9">ไม่พบข้อมูลการกู้</td>
                                         </tr>
                                     )}
                                 </tbody>
