@@ -82,7 +82,7 @@ function ShowMember() {
                                             <tr key={key}>
                                                 <td>{++i}</td>
                                                 <td>{row.name}</td>
-                                                <td>{row.amount - row.sum}</td>
+                                                <td>{row.balance}</td>
                                                 <td>{row.interest}</td>
                                                 <td>
                                                     <Link to={`/loan/${row.member_id}`} className='btn btn-info btn-sm'>การกู้</Link>
