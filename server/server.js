@@ -18,26 +18,8 @@ const db = mysql.createConnection({
     database: "loan"
 })
 
-app.get('/', (req, res) => {
-    let ts = Date.now();
-
-    let date_time = new Date(Date.now());
-    let date = date_time.getDate();
-    let month = date_time.getMonth() + 1;
-    let year = date_time.getFullYear();
-    let start_date = year + "-" + month + "-" + date;
-
-    let paydate_time = new Date(date_time.setDate(date_time.getDate() + 31));
-    let paydate = paydate_time.getDate();
-    let paymonth = paydate_time.getMonth() + 1;
-    let payyear = paydate_time.getFullYear();
-    let pay_date = payyear + "-" + paymonth + "-" + paydate;
-
-    return res.json(start_date + ' กับ ' + pay_date);
-})
-
 app.get('/member', (req, res) => {
-    const sql = "SELECT m.member_id, name, (SELECT SUM(amount) FROM loan WHERE member_id = m.member_id) AS amount, (SELECT SUM(amount/100*10) FROM loan WHERE member_id = m.member_id) AS interest, (SELECT SUM(loan) FROM payment p WHERE p.loan_id IN(SELECT loan_id FROM loan l WHERE l.member_id = m.member_id)) AS sum FROM member m";
+    const sql = "SELECT m.member_id, name, (SELECT SUM(amount) FROM loan WHERE member_id = m.member_id) AS amount, (SELECT SUM(interest) FROM loan WHERE member_id = m.member_id) AS interest, (SELECT SUM(loan) FROM payment p WHERE p.loan_id IN(SELECT loan_id FROM loan l WHERE l.member_id = m.member_id)) AS sum FROM member m";
 
     db.query(sql, (err, result) => {
         if (err) return res.json(err);
