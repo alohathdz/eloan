@@ -18,6 +18,10 @@ const db = mysql.createConnection({
     database: "loan"
 });
 
+function daysInMonth(month, year) {
+    return new Date(year, month, 0).getDate();
+}
+
 app.get('/member', (req, res) => {
     const sql = "SELECT m.member_id, name, (SELECT SUM(balance) FROM loan WHERE member_id = m.member_id) AS balance, (SELECT SUM(balance)*(rate/100) FROM loan WHERE member_id = m.member_id) AS interest FROM member m";
 
@@ -81,19 +85,32 @@ app.get('/loan/:id', (req, res) => {
 app.post('/loan/create', (req, res) => {
     const sql = "INSERT INTO loan (amount, rate, balance, start_date, pay_date, member_id) VALUES(?)";
 
-    let balance = req.body.amount;
+    var balance = req.body.amount;
 
-    let date_time = new Date(req.body.start_date);
-    let date = date_time.getDate();
-    let month = date_time.getMonth() + 1;
-    let year = date_time.getFullYear();
-    let start_date = year + "-" + month + "-" + date;
+    var date_time = new Date(req.body.start_date);
+    var date = date_time.getDate();
+    var month = date_time.getMonth() + 1;
+    var year = date_time.getFullYear();
+    var start_date = year + "-" + month + "-" + date;
 
-    let paydate_time = new Date(date_time.setDate(date_time.getDate() + 30));
-    let paydate = paydate_time.getDate();
-    let paymonth = paydate_time.getMonth() + 1;
-    let payyear = paydate_time.getFullYear();
-    let pay_date = payyear + "-" + paymonth + "-" + paydate;
+    const monthNextEven = [3, 5, 10];
+    const monthNextOdd = [7, 12];
+    const monthSpecial = [1, 2];
+    if (daysInMonth(month, year) == 30) {
+        var days = 30;
+    } else if (monthNextEven.includes(month)) {
+        var days = 30;
+    } else if (monthNextOdd.includes(month)) {
+        var days = 31;
+    } else if (monthSpecial.includes(month)) {
+        var days = 28;
+    }
+    
+    var paydate_time = new Date(date_time.setDate(date_time.getDate() + days));
+    var paydate = paydate_time.getDate();
+    var paymonth = paydate_time.getMonth() + 1;
+    var payyear = paydate_time.getFullYear();
+    var pay_date = payyear + "-" + paymonth + "-" + paydate;
 
     const values = [
         req.body.amount,
@@ -161,4 +178,18 @@ app.post('/payloan/create', (req, res) => {
         if (err) return res.json(err);
         return res.json(result);
     });
+});
+
+app.get('/', (req, res) => {
+    let date = new Date();
+    let month = date.getMonth() + +2;
+    let year = date.getFullYear();
+    const month_odd = [1, 3, 5, 7, 8, 10, 12];
+
+    if (month_odd.includes(month)) {
+        var days = 'odd';
+    } else {
+        var days = 'even';
+    }
+    return res.json(days);
 });
