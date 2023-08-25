@@ -102,9 +102,9 @@ function DetailLoan() {
                                                 <td>{moment(row.start_date).locale('th').add(543, 'years').format('ll')}</td>
                                                 <td>{moment(row.pay_date).locale('th').add(543, 'years').format('ll')}</td>
                                                 <td>
-                                                    {row.loan ? (row.loan) : ("ยังไม่มียอดชำระ")}
+                                                    {row.loan ? (row.loan) : ("-")}
                                                 </td>
-                                                <td>{row.interest ? (row.interest) : ("ยังไม่มียอดชำระ")}</td>
+                                                <td>{row.interest ? (row.interest) : ("-")}</td>
                                                 <td>
                                                     <Link to={`/loan/pay/${row.loan_id}`} className='btn btn-sm btn-success me-2'>ชำระ</Link>
                                                     <Link to={`/loan/edit/${row.loan_id}`} className='btn btn-sm btn-warning me-2'>แก้ไข</Link>

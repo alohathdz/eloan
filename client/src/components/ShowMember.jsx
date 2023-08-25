@@ -93,7 +93,7 @@ function ShowMember() {
                                         ))
                                     ) : (
                                         <tr>
-                                            <td colSpan="3">ไม่พบข้อมูลผู้กู้</td>
+                                            <td colSpan="5">ไม่พบข้อมูลผู้กู้</td>
                                         </tr>
                                     )}
                                 </tbody>

@@ -19,14 +19,26 @@ function CreateLoan() {
         e.preventDefault();
 
         await axios.post('http://localhost:8081/loan/create', values)
+            .then(res => {
+                Swal.fire({
+                    icon: "success",
+                    text: "Create Loan Successfully."
+                });
+                navigate(-1);
+            }).catch(err => console.log(err))
+    }
+
+    const [name, setName] = useState('');
+    const getName = async () => {
+        await axios.get('http://localhost:8081/member/edit/' + id)
         .then(res => {
-            Swal.fire({
-                icon: "success",
-                text: "Create Loan Successfully."
-            });
-            navigate(-1);
+            setName(res.data[0].name);
         }).catch(err => console.log(err))
     }
+
+    useEffect(() => {
+        getName();
+    }, [])
 
     return (
         <div className="container">
@@ -42,15 +54,15 @@ function CreateLoan() {
                                         <Col>
                                             <Form.Group controlId="Amount" className='mb-3'>
                                                 <Form.Label>ยอดกู้</Form.Label>
-                                                <Form.Control type="text" onChange={e => setValues({...values, amount: e.target.value})} />
+                                                <Form.Control type="text" onChange={e => setValues({ ...values, amount: e.target.value })} />
                                             </Form.Group>
                                             <Form.Group controlId="Rate" className='mb-3'>
                                                 <Form.Label>อัตราดอกเบี้ย</Form.Label>
-                                                <Form.Control type="text" onChange={e => setValues({...values, rate: e.target.value})} />
+                                                <Form.Control type="text" onChange={e => setValues({ ...values, rate: e.target.value })} />
                                             </Form.Group>
                                             <Form.Group controlId="startDate" className='mb-3'>
                                                 <Form.Label>วันที่กู้</Form.Label>
-                                                <Form.Control type="date" onChange={e => setValues({...values, start_date: e.target.value})} />
+                                                <Form.Control type="date" onChange={e => setValues({ ...values, start_date: e.target.value })} />
                                             </Form.Group>
                                         </Col>
                                     </Row>

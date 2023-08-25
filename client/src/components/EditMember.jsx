@@ -46,7 +46,7 @@ function EditMember() {
                                 <Form onSubmit={handleUpdate}>
                                     <Row>
                                         <Col>
-                                            <Form.Group controlId="Name">
+                                            <Form.Group controlId="Name" className='mb-3'>
                                                 <Form.Label>ชื่อ</Form.Label>
                                                 <Form.Control type="text" value={name} onChange={e => setName(e.target.value)} />
                                             </Form.Group>
