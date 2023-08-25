@@ -4,7 +4,7 @@ import axios from 'axios'
 import Swal from 'sweetalert2'
 import { useNavigate, useParams } from 'react-router-dom'
 
-function PayLoan() {
+function CreatePay() {
 
     const { id } = useParams();
     const navigate = useNavigate();
@@ -30,7 +30,7 @@ function PayLoan() {
     const handleCreate = async (e) => {
         e.preventDefault();
 
-        await axios.post('http://localhost:8081/payloan/create', values)
+        await axios.post('http://localhost:8081/pay/create', values)
             .then(res => {
                 console.log(res);
                 Swal.fire({
@@ -80,4 +80,4 @@ function PayLoan() {
     )
 }
 
-export default PayLoan
+export default CreatePay

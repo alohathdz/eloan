@@ -85,7 +85,7 @@ function DetailLoan() {
                                         <th>ยอดคงเหลือ</th>
                                         <th>ดอกเบี้ย</th>
                                         <th>วันที่กู้</th>
-                                        <th>วันชำระยอด</th>
+                                        <th>วันกำหนดชำระ</th>
                                         <th>ยอดชำระเงินต้น</th>
                                         <th>ยอดชำระดอกเบี้ย</th>
                                         <th>จัดการ</th>
@@ -100,13 +100,13 @@ function DetailLoan() {
                                                 <td>{row.balance}</td>
                                                 <td>{row.balance*(row.rate/100)}</td>
                                                 <td>{moment(row.start_date).locale('th').add(543, 'years').format('ll')}</td>
-                                                <td>{moment(row.pay_date).locale('th').add(543, 'years').format('ll')}</td>
+                                                <td>{moment(row.due_date).locale('th').add(543, 'years').format('ll')}</td>
                                                 <td>
                                                     {row.loan ? (row.loan) : ("-")}
                                                 </td>
                                                 <td>{row.interest ? (row.interest) : ("-")}</td>
                                                 <td>
-                                                    <Link to={`/loan/pay/${row.loan_id}`} className='btn btn-sm btn-success me-2'>ชำระ</Link>
+                                                    <Link to={`/pay/create/${row.loan_id}`} className='btn btn-sm btn-success me-2'>ชำระ</Link>
                                                     <Link to={`/loan/edit/${row.loan_id}`} className='btn btn-sm btn-warning me-2'>แก้ไข</Link>
                                                     <Button className='btn btn-sm btn-danger' onClick={e => handleDelete(row.loan_id)}>ลบ</Button>
                                                 </td>

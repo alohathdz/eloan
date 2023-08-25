@@ -73,7 +73,7 @@ app.delete('/member/delete/:id', (req, res) => {
 });
 
 app.get('/loan/:id', (req, res) => {
-    const sql = "SELECT loan_id, amount, balance, rate, start_date, pay_date, (SELECT SUM(loan) FROM payment WHERE loan_id = l.loan_id) AS loan, (SELECT SUM(interest) FROM payment WHERE loan_id = l.loan_id) AS interest FROM loan l WHERE member_id = ?";
+    const sql = "SELECT loan_id, amount, balance, rate, start_date, due_date, (SELECT SUM(loan) FROM payment WHERE loan_id = l.loan_id) AS loan, (SELECT SUM(interest) FROM payment WHERE loan_id = l.loan_id) AS interest FROM loan l WHERE member_id = ?";
     const id = req.params.id;
 
     db.query(sql, id, (err, result) => {
@@ -83,7 +83,7 @@ app.get('/loan/:id', (req, res) => {
 });
 
 app.post('/loan/create', (req, res) => {
-    const sql = "INSERT INTO loan (amount, rate, balance, start_date, pay_date, member_id) VALUES(?)";
+    const sql = "INSERT INTO loan (amount, rate, balance, start_date, due_date, member_id) VALUES(?)";
 
     var balance = req.body.amount;
 
@@ -110,14 +110,14 @@ app.post('/loan/create', (req, res) => {
     var paydate = paydate_time.getDate();
     var paymonth = paydate_time.getMonth() + 1;
     var payyear = paydate_time.getFullYear();
-    var pay_date = payyear + "-" + paymonth + "-" + paydate;
+    var due_date = payyear + "-" + paymonth + "-" + paydate;
 
     const values = [
         req.body.amount,
         req.body.rate,
         balance,
         start_date,
-        pay_date,
+        due_date,
         req.body.id,
     ];
 
@@ -157,7 +157,7 @@ app.put('/loan/update/:id', (req, res) => {
     })
 });
 
-app.post('/payloan/create', (req, res) => {
+app.post('/pay/create', (req, res) => {
     const sql = "INSERT INTO payment (loan, interest, pay_date, loan_id) VALUES(?)";
     let date_time = new Date(req.body.pay_date);
     let date = date_time.getDate();
