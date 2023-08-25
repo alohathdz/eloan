@@ -30,46 +30,35 @@ app.get('/member', (req, res) => {
 });
 
 app.post('/member/create', (req, res) => {
-    const values = req.body.name;
-
-    db.query("INSERT INTO member (name) VALUES(?)", [values], (err, result) => {
+    db.query("INSERT INTO member (name) VALUES(?)", req.body.name, (err, result) => {
         if (err) return res.json(err);
         return res.json(result);
     })
 });
 
 app.get('/member/edit/:id', (req, res) => {
-    const id = req.params.id;
-
-    db.query("SELECT * FROM member WHERE member_id = ?", id, (err, result) => {
+    db.query("SELECT * FROM member WHERE member_id = ?", req.params.id, (err, result) => {
         if (err) return res.json(err);
         return res.json(result);
     })
 });
 
 app.put('/member/update/:id', (req, res) => {
-    const id = req.params.id;
-    const values = req.body.name;
-
-    db.query("UPDATE member SET name = ? WHERE member_id = ?", [values, id], (err, result) => {
+    db.query("UPDATE member SET name = ? WHERE member_id = ?", [req.body.name, req.params.id], (err, result) => {
         if (err) return res.json(err);
         return res.json(result);
     })
 });
 
 app.delete('/member/delete/:id', (req, res) => {
-    const id = req.params.id;
-
-    db.query("DELETE FROM member WHERE member_id = ?", id, (err, result) => {
+    db.query("DELETE FROM member WHERE member_id = ?", req.params.id, (err, result) => {
         if (err) return res.json(err);
         return res.json(result);
     })
 });
 
 app.get('/loan/:id', (req, res) => {
-    const id = req.params.id;
-
-    db.query("SELECT loan_id, amount, balance, rate, start_date, due_date, (SELECT SUM(loan) FROM payment WHERE loan_id = l.loan_id) AS loan, (SELECT SUM(interest) FROM payment WHERE loan_id = l.loan_id) AS interest FROM loan l WHERE member_id = ?", id, (err, result) => {
+    db.query("SELECT loan_id, amount, balance, rate, start_date, due_date, (SELECT SUM(loan) FROM payment WHERE loan_id = l.loan_id) AS loan, (SELECT SUM(interest) FROM payment WHERE loan_id = l.loan_id) AS interest FROM loan l WHERE member_id = ?", req.params.id, (err, result) => {
         if (err) return res.json(err);
         return res.json(result);
     })
@@ -120,27 +109,28 @@ app.post('/loan/create', (req, res) => {
 });
 
 app.delete('/loan/delete/:id', (req, res) => {
-    const id = req.params.id;
-
-    db.query("DELETE FROM loan WHERE loan_id = ?", id, (err, result) => {
+    db.query("DELETE FROM loan WHERE loan_id = ?", req.params.id, (err, result) => {
         if (err) return res.json(err);
         return res.json(result);
     })
 });
 
 app.get('/loan/edit/:id', (req, res) => {
-    const id = req.params.id;
-
-    db.query("SELECT amount, rate, start_date, name FROM loan d INNER JOIN member m ON d.member_id = m.member_id WHERE loan_id = ?", id, (err, result) => {
+    db.query("SELECT amount, rate, start_date, name FROM loan d INNER JOIN member m ON d.member_id = m.member_id WHERE loan_id = ?", req.params.id, (err, result) => {
         if (err) return res.json(err);
         return res.json(result);
     })
 });
 
 app.put('/loan/update/:id', (req, res) => {
-    const id = req.params.id;
+    const values = [
+        req.body.amount,
+        req.body.rate,
+        req.body.start_date,
+        req.params.id
+    ];
 
-    db.query("UPDATE loan SET amount = ?, rate = ?, start_date = ? WHERE loan_id = ?", [req.body.amount, req.body.rate, req.body.start_date, id], (err, result) => {
+    db.query("UPDATE loan SET amount = ?, rate = ?, start_date = ? WHERE loan_id = ?", [req.body.amount, req.body.rate, req.body.start_date, req.params.id], (err, result) => {
         if (err) return res.json(err);
         return res.json(result);
     })
@@ -179,10 +169,7 @@ app.post('/pay/create', (req, res) => {
     ]
 
     db.query("INSERT INTO payment (loan, interest, pay_date, loan_id) VALUES(?)", [values], (err, result) => {
-        db.query("UPDATE loan SET balance = balance - ?, due_date = ? WHERE loan_id = ?", [req.body.loan, due_date, req.body.id], (err, result) => {
-            if (err) console.log(err);
-            console.log(result);
-        });
+        db.query("UPDATE loan SET balance = balance - ?, due_date = ? WHERE loan_id = ?", [req.body.loan, due_date, req.body.id]);
         if (err) return res.json(err);
         return res.json(result);
     });
