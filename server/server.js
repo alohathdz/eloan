@@ -76,7 +76,6 @@ app.post('/loan/create', (req, res) => {
     const monthNextEven = [3, 5, 8, 10];
     const monthNextOdd = [7, 12];
     const monthSpecial = [1, 2];
-    const monthEven = [4, 6, 9, 11];
     if (daysInMonth(month, year) == 30) {
         var days = 30;
     } else if (monthNextEven.includes(month)) {
@@ -123,13 +122,6 @@ app.get('/loan/edit/:id', (req, res) => {
 });
 
 app.put('/loan/update/:id', (req, res) => {
-    const values = [
-        req.body.amount,
-        req.body.rate,
-        req.body.start_date,
-        req.params.id
-    ];
-
     db.query("UPDATE loan SET amount = ?, rate = ?, start_date = ? WHERE loan_id = ?", [req.body.amount, req.body.rate, req.body.start_date, req.params.id], (err, result) => {
         if (err) return res.json(err);
         return res.json(result);
