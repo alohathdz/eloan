@@ -23,77 +23,137 @@ function daysInMonth(month, year) {
 }
 
 app.get('/member', (req, res) => {
-    const sql = "SELECT m.member_id, name, (SELECT SUM(balance) FROM loan WHERE member_id = m.member_id) AS balance, (SELECT SUM(balance)*(rate/100) FROM loan WHERE member_id = m.member_id) AS interest FROM member m";
-
-    db.query(sql, (err, result) => {
+    db.query("SELECT m.member_id, name, (SELECT SUM(balance) FROM loan WHERE member_id = m.member_id) AS balance, (SELECT SUM(balance)*(rate/100) FROM loan WHERE member_id = m.member_id) AS interest FROM member m", (err, result) => {
         if (err) return res.json(err);
         return res.json(result);
     })
 });
 
 app.post('/member/create', (req, res) => {
-    const sql = "INSERT INTO member (name) VALUES(?)";
     const values = req.body.name;
 
-    db.query(sql, [values], (err, result) => {
+    db.query("INSERT INTO member (name) VALUES(?)", [values], (err, result) => {
         if (err) return res.json(err);
         return res.json(result);
     })
 });
 
 app.get('/member/edit/:id', (req, res) => {
-    const sql = "SELECT * FROM member WHERE member_id = ?";
     const id = req.params.id;
 
-    db.query(sql, id, (err, result) => {
+    db.query("SELECT * FROM member WHERE member_id = ?", id, (err, result) => {
         if (err) return res.json(err);
         return res.json(result);
     })
 });
 
 app.put('/member/update/:id', (req, res) => {
-    const sql = "UPDATE member SET name = ? WHERE member_id = ?";
     const id = req.params.id;
     const values = req.body.name;
 
-    db.query(sql, [values, id], (err, result) => {
+    db.query("UPDATE member SET name = ? WHERE member_id = ?", [values, id], (err, result) => {
         if (err) return res.json(err);
         return res.json(result);
     })
 });
 
 app.delete('/member/delete/:id', (req, res) => {
-    const sql = "DELETE FROM member WHERE member_id = ?";
     const id = req.params.id;
 
-    db.query(sql, id, (err, result) => {
+    db.query("DELETE FROM member WHERE member_id = ?", id, (err, result) => {
         if (err) return res.json(err);
         return res.json(result);
     })
 });
 
 app.get('/loan/:id', (req, res) => {
-    const sql = "SELECT loan_id, amount, balance, rate, start_date, due_date, (SELECT SUM(loan) FROM payment WHERE loan_id = l.loan_id) AS loan, (SELECT SUM(interest) FROM payment WHERE loan_id = l.loan_id) AS interest FROM loan l WHERE member_id = ?";
     const id = req.params.id;
 
-    db.query(sql, id, (err, result) => {
+    db.query("SELECT loan_id, amount, balance, rate, start_date, due_date, (SELECT SUM(loan) FROM payment WHERE loan_id = l.loan_id) AS loan, (SELECT SUM(interest) FROM payment WHERE loan_id = l.loan_id) AS interest FROM loan l WHERE member_id = ?", id, (err, result) => {
         if (err) return res.json(err);
         return res.json(result);
     })
 });
 
 app.post('/loan/create', (req, res) => {
-    const sql = "INSERT INTO loan (amount, rate, balance, start_date, due_date, member_id) VALUES(?)";
+    let balance = req.body.amount;
 
-    var balance = req.body.amount;
+    let date_time = new Date(req.body.start_date);
+    let date = date_time.getDate();
+    let month = date_time.getMonth() + 1;
+    let year = date_time.getFullYear();
+    let start_date = year + "-" + month + "-" + date;
 
-    var date_time = new Date(req.body.start_date);
-    var date = date_time.getDate();
-    var month = date_time.getMonth() + 1;
-    var year = date_time.getFullYear();
-    var start_date = year + "-" + month + "-" + date;
+    const monthNextEven = [3, 5, 8, 10];
+    const monthNextOdd = [7, 12];
+    const monthSpecial = [1, 2];
+    const monthEven = [4, 6, 9, 11];
+    if (daysInMonth(month, year) == 30) {
+        var days = 30;
+    } else if (monthNextEven.includes(month)) {
+        var days = 30;
+    } else if (monthNextOdd.includes(month)) {
+        var days = 31;
+    } else if (monthSpecial.includes(month)) {
+        var days = 28;
+    }
+    
+    let due_date_time = new Date(date_time.setDate(date_time.getDate() + days));
+    let dueDate = due_date_time.getDate();
+    let dueMonth = due_date_time.getMonth() + 1;
+    let dueYear = due_date_time.getFullYear();
+    let due_date = dueYear + "-" + dueMonth + "-" + dueDate;
 
-    const monthNextEven = [3, 5, 10];
+    const values = [
+        req.body.amount,
+        req.body.rate,
+        balance,
+        start_date,
+        due_date,
+        req.body.id,
+    ];
+
+    db.query("INSERT INTO loan (amount, rate, balance, start_date, due_date, member_id) VALUES(?)", [values], (err, result) => {
+        if (err) return res.json(err);
+        return res.json(result);
+    })
+});
+
+app.delete('/loan/delete/:id', (req, res) => {
+    const id = req.params.id;
+
+    db.query("DELETE FROM loan WHERE loan_id = ?", id, (err, result) => {
+        if (err) return res.json(err);
+        return res.json(result);
+    })
+});
+
+app.get('/loan/edit/:id', (req, res) => {
+    const id = req.params.id;
+
+    db.query("SELECT amount, rate, start_date, name FROM loan d INNER JOIN member m ON d.member_id = m.member_id WHERE loan_id = ?", id, (err, result) => {
+        if (err) return res.json(err);
+        return res.json(result);
+    })
+});
+
+app.put('/loan/update/:id', (req, res) => {
+    const id = req.params.id;
+
+    db.query("UPDATE loan SET amount = ?, rate = ?, start_date = ? WHERE loan_id = ?", [req.body.amount, req.body.rate, req.body.start_date, id], (err, result) => {
+        if (err) return res.json(err);
+        return res.json(result);
+    })
+});
+
+app.post('/pay/create', (req, res) => {
+    let date_time = new Date(req.body.pay_date);
+    let date = date_time.getDate();
+    let month = date_time.getMonth() + 1;
+    let year = date_time.getFullYear();
+    let pay_date = year + "-" + month + "-" + date;
+
+    const monthNextEven = [3, 5, 8, 10];
     const monthNextOdd = [7, 12];
     const monthSpecial = [1, 2];
     if (daysInMonth(month, year) == 30) {
@@ -105,65 +165,12 @@ app.post('/loan/create', (req, res) => {
     } else if (monthSpecial.includes(month)) {
         var days = 28;
     }
-    
-    var paydate_time = new Date(date_time.setDate(date_time.getDate() + days));
-    var paydate = paydate_time.getDate();
-    var paymonth = paydate_time.getMonth() + 1;
-    var payyear = paydate_time.getFullYear();
-    var due_date = payyear + "-" + paymonth + "-" + paydate;
+    let due_date_time = new Date(date_time.setDate(date_time.getDate() + days));
+    let dueDate = due_date_time.getDate();
+    let dueMonth = due_date_time.getMonth() + 1;
+    let dueYear = due_date_time.getFullYear();
+    let due_date = dueYear + "-" + dueMonth + "-" + dueDate;
 
-    const values = [
-        req.body.amount,
-        req.body.rate,
-        balance,
-        start_date,
-        due_date,
-        req.body.id,
-    ];
-
-    db.query(sql, [values], (err, result) => {
-        if (err) return res.json(err);
-        return res.json(result);
-    })
-});
-
-app.delete('/loan/delete/:id', (req, res) => {
-    const sql = "DELETE FROM loan WHERE loan_id = ?";
-    const id = req.params.id;
-
-    db.query(sql, id, (err, result) => {
-        if (err) return res.json(err);
-        return res.json(result);
-    })
-});
-
-app.get('/loan/edit/:id', (req, res) => {
-    const sql = "SELECT amount, rate, start_date, name FROM loan d INNER JOIN member m ON d.member_id = m.member_id WHERE loan_id = ?";
-    const id = req.params.id;
-
-    db.query(sql, id, (err, result) => {
-        if (err) return res.json(err);
-        return res.json(result);
-    })
-});
-
-app.put('/loan/update/:id', (req, res) => {
-    const sql = "UPDATE loan SET amount = ?, rate = ?, start_date = ? WHERE loan_id = ?";
-    const id = req.params.id;
-
-    db.query(sql, [req.body.amount, req.body.rate, req.body.start_date, id], (err, result) => {
-        if (err) return res.json(err);
-        return res.json(result);
-    })
-});
-
-app.post('/pay/create', (req, res) => {
-    const sql = "INSERT INTO payment (loan, interest, pay_date, loan_id) VALUES(?)";
-    let date_time = new Date(req.body.pay_date);
-    let date = date_time.getDate();
-    let month = date_time.getMonth() + 1;
-    let year = date_time.getFullYear();
-    let pay_date = year + "-" + month + "-" + date;
     const values = [
         req.body.loan,
         req.body.interest,
@@ -171,9 +178,10 @@ app.post('/pay/create', (req, res) => {
         req.body.id
     ]
 
-    db.query(sql, [values], (err, result) => {
-        db.query("UPDATE loan SET balance = balance - ? WHERE loan_id = ?", [req.body.loan, req.body.id], (err, result) => {
-            if (err) return res.json(err);
+    db.query("INSERT INTO payment (loan, interest, pay_date, loan_id) VALUES(?)", [values], (err, result) => {
+        db.query("UPDATE loan SET balance = balance - ?, due_date = ? WHERE loan_id = ?", [req.body.loan, due_date, req.body.id], (err, result) => {
+            if (err) console.log(err);
+            console.log(result);
         });
         if (err) return res.json(err);
         return res.json(result);
