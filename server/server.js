@@ -73,35 +73,15 @@ app.post('/loan/create', (req, res) => {
     let year = date_time.getFullYear();
     let start_date = year + "-" + month + "-" + date;
 
-    const monthNextEven = [3, 5, 8, 10];
-    const monthNextOdd = [7, 12];
-    const monthSpecial = [1, 2];
-    if (daysInMonth(month, year) == 30) {
-        var days = 30;
-    } else if (monthNextEven.includes(month)) {
-        var days = 30;
-    } else if (monthNextOdd.includes(month)) {
-        var days = 31;
-    } else if (monthSpecial.includes(month)) {
-        var days = 28;
-    }
-    
-    let due_date_time = new Date(date_time.setDate(date_time.getDate() + days));
-    let dueDate = due_date_time.getDate();
-    let dueMonth = due_date_time.getMonth() + 1;
-    let dueYear = due_date_time.getFullYear();
-    let due_date = dueYear + "-" + dueMonth + "-" + dueDate;
-
     const values = [
         req.body.amount,
         req.body.rate,
         balance,
         start_date,
-        due_date,
-        req.body.id,
+        req.body.id
     ];
 
-    db.query("INSERT INTO loan (amount, rate, balance, start_date, due_date, member_id) VALUES(?)", [values], (err, result) => {
+    db.query("INSERT INTO loan (amount, rate, balance, start_date, member_id, due_date) VALUES(?, DATE_ADD(?, INTERVAL 1 MONTH))", [values, start_date], (err, result) => {
         if (err) return res.json(err);
         return res.json(result);
     })
@@ -135,24 +115,6 @@ app.post('/pay/create', (req, res) => {
     let year = date_time.getFullYear();
     let pay_date = year + "-" + month + "-" + date;
 
-    const monthNextEven = [3, 5, 8, 10];
-    const monthNextOdd = [7, 12];
-    const monthSpecial = [1, 2];
-    if (daysInMonth(month, year) == 30) {
-        var days = 30;
-    } else if (monthNextEven.includes(month)) {
-        var days = 30;
-    } else if (monthNextOdd.includes(month)) {
-        var days = 31;
-    } else if (monthSpecial.includes(month)) {
-        var days = 28;
-    }
-    let due_date_time = new Date(date_time.setDate(date_time.getDate() + days));
-    let dueDate = due_date_time.getDate();
-    let dueMonth = due_date_time.getMonth() + 1;
-    let dueYear = due_date_time.getFullYear();
-    let due_date = dueYear + "-" + dueMonth + "-" + dueDate;
-
     const values = [
         req.body.loan,
         req.body.interest,
@@ -161,22 +123,12 @@ app.post('/pay/create', (req, res) => {
     ]
 
     db.query("INSERT INTO payment (loan, interest, pay_date, loan_id) VALUES(?)", [values], (err, result) => {
-        db.query("UPDATE loan SET balance = balance - ?, due_date = ? WHERE loan_id = ?", [req.body.loan, due_date, req.body.id]);
+        db.query("UPDATE loan SET balance = balance - ?, due_date = DATE_ADD(due_date, INTERVAL 1 MONTH) WHERE loan_id = ?", [req.body.loan, req.body.id]);
         if (err) return res.json(err);
         return res.json(result);
     });
 });
 
 app.get('/', (req, res) => {
-    let date = new Date();
-    let month = date.getMonth() + +2;
-    let year = date.getFullYear();
-    const month_odd = [1, 3, 5, 7, 8, 10, 12];
 
-    if (month_odd.includes(month)) {
-        var days = 'odd';
-    } else {
-        var days = 'even';
-    }
-    return res.json(days);
 });
