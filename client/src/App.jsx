@@ -7,7 +7,7 @@ import Home from './components/Home'
 import CreateMember from './components/CreateMember'
 import ShowMember from "./components/ShowMember"
 import EditMember from "./components/EditMember"
-import DetailLoan from "./components/DetailLoan"
+import ShowLoan from "./components/ShowLoan"
 import CreateLoan from "./components/CreateLoan"
 import EditLoan from "./components/EditLoan"
 import CreatePay from "./components/CreatePay"
@@ -19,7 +19,7 @@ function App() {
       <Navbar bg="primary">
         <Container>
           <Link to={"/"} className="navbar-brand text-white">
-            Loan Management System
+            ระบบบริหารจัดการเงินกู้
           </Link>
         </Container>
       </Navbar>
@@ -32,7 +32,7 @@ function App() {
               <Route path="/member" element={<ShowMember />} />
               <Route path="/member/create" element={<CreateMember />} />
               <Route path="/member/edit/:id" element={<EditMember />} />
-              <Route path="/loan/:id" element={<DetailLoan />} />
+              <Route path="/loan/:id" element={<ShowLoan />} />
               <Route path="/loan/create/:id" element={<CreateLoan />} />
               <Route path="/loan/edit/:id" element={<EditLoan />} />
               <Route path="/pay/create/:id" element={<CreatePay />} />
