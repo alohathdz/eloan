@@ -19,6 +19,16 @@ function ShowMember() {
         });
     }
 
+    let sum_balance = 0;
+    let sum_interest = 0;
+
+    members.forEach(row => {
+        sum_balance += row.balance;
+        sum_interest += row.interest;
+    });
+
+    var nf = new Intl.NumberFormat();
+
     const handleDelete = async (id) => {
         const isConfirm = await Swal.fire({
             title: "ยันยันการลบข้อมูล",
@@ -82,8 +92,8 @@ function ShowMember() {
                                             <tr key={key}>
                                                 <td>{++i}</td>
                                                 <td>{row.name}</td>
-                                                <td>{row.balance ? (row.balance) : ("-")}</td>
-                                                <td>{row.interest ? (row.interest) : ("-")}</td>
+                                                <td>{row.balance ? (nf.format(row.balance)) : ("-")}</td>
+                                                <td>{row.interest ? (nf.format(row.interest)) : ("-")}</td>
                                                 <td>
                                                     <Link to={`/loan/${row.member_id}`} className='btn btn-info btn-sm'>การกู้</Link>
                                                     <Link to={`/member/edit/${row.member_id}`} className='btn btn-sm btn-warning mx-2'>แก้ไข</Link>
@@ -96,6 +106,11 @@ function ShowMember() {
                                             <td colSpan="5">ไม่พบข้อมูลผู้กู้</td>
                                         </tr>
                                     )}
+                                    <tr>
+                                        <td colSpan={2}>รวม</td>
+                                        <td>{nf.format(sum_balance)}</td>
+                                        <td>{nf.format(sum_interest)}</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
