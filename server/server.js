@@ -15,7 +15,7 @@ const db = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
-    database: "loan"
+    database: "eloan"
 });
 
 function daysInMonth(month, year) {
