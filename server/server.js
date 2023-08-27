@@ -129,5 +129,12 @@ app.post('/pay/create', (req, res) => {
     });
 });
 
+app.get('/CheckDueDate', (req, res) => {
+    db.query("SELECT DISTINCT(member_id) FROM `loan` WHERE due_date > NOW()", (err, result) => {
+        if (err) console.log(err);
+        return res.json(result);
+    });
+});
+
 app.get('/', (req, res) => {
 });

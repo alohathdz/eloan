@@ -7,6 +7,7 @@ import Swal from 'sweetalert2'
 function ShowMember() {
 
     const [members, setMembers] = useState([]);
+    const [memberID, setMemberID] = useState([]);
     let i = 0;
 
     useEffect(() => {
@@ -28,6 +29,12 @@ function ShowMember() {
     });
 
     var nf = new Intl.NumberFormat();
+
+    const checkDueDate = async () => {
+        await axios.get('http://localhost:8081/CheckDueDate').then(({ data }) => {
+            setMemberID(data);
+        })
+    }
 
     const handleDelete = async (id) => {
         const isConfirm = await Swal.fire({
