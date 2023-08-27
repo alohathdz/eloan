@@ -11,6 +11,7 @@ function DetailLoan() {
     const [name, setName] = useState('');
     let i = 0;
     const { id } = useParams();
+    let dateNow = moment().format();
 
     useEffect(() => {
         getLoans();
@@ -63,7 +64,7 @@ function DetailLoan() {
             <div className="row">
                 <div className="col-12">
                     <div className="float-start">
-                        <h4>รายการกู้ของ {name}</h4>
+                        <h4>รายการกู้ของ <font color="red">{name}</font></h4>
                     </div>
                     <div className="float-end">
                         <Link className="btn btn-sm btn-primary mb-2 me-1" to={`/loan/create/${id}`}>
@@ -81,10 +82,10 @@ function DetailLoan() {
                                 <thead>
                                     <tr>
                                         <th>ลำดับ</th>
+                                        <th>วันที่กู้</th>
                                         <th>ยอดกู้</th>
                                         <th>ยอดคงเหลือ</th>
                                         <th>ดอกเบี้ย</th>
-                                        <th>วันที่กู้</th>
                                         <th>วันกำหนดชำระ</th>
                                         <th>ยอดชำระเงินต้น</th>
                                         <th>ยอดชำระดอกเบี้ย</th>
@@ -96,11 +97,15 @@ function DetailLoan() {
                                         loans.map((row, key) => (
                                             <tr key={key}>
                                                 <td>{++i}</td>
-                                                <td>{row.amount}</td>
-                                                <td>{row.balance}</td>
-                                                <td>{row.balance*(row.rate/100)}</td>
                                                 <td>{moment(row.start_date).locale('th').add(543, 'years').format('ll')}</td>
-                                                <td>{moment(row.due_date).locale('th').add(543, 'years').format('ll')}</td>
+                                                <td>{row.amount}</td>
+                                                <td className='text-primary'>{row.balance}</td>
+                                                <td className='text-success'>{row.balance * (row.rate / 100)}</td>
+                                                {moment().format() > moment(row.due_date).format() ? (
+                                                    <td className='text-danger'>{moment(row.due_date).locale('th').add(543, 'years').format('ll')}</td>
+                                                ) : (
+                                                    <td>{moment(row.due_date).locale('th').add(543, 'years').format('ll')}</td>
+                                                )}
                                                 <td>
                                                     {row.loan ? (row.loan) : ("-")}
                                                 </td>

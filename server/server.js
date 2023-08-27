@@ -130,5 +130,4 @@ app.post('/pay/create', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-
 });
