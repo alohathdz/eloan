@@ -24,7 +24,6 @@ function daysInMonth(month, year) {
 
 app.get('/member', (req, res) => {
     const sql = "SELECT m.member_id, name, SUM(amount) AS amount, SUM(balance) AS balance, SUM(balance*rate/100) AS interest, SUM(loan) AS pay_loan, SUM(interest) AS pay_interest FROM payment p RIGHT JOIN loan l ON p.loan_id = l.loan_id RIGHT JOIN member m ON l.member_id = m.member_id GROUP BY name";
-    //const sql = "SELECT m.member_id, name, (SELECT SUM(balance) FROM loan WHERE member_id = m.member_id) AS balance, (SELECT SUM(balance)*(rate/100) FROM loan WHERE member_id = m.member_id) AS interest FROM member m";
     db.query(sql, (err, result) => {
         if (err) return res.json(err);
         return res.json(result);
@@ -61,7 +60,6 @@ app.delete('/member/delete/:id', (req, res) => {
 
 app.get('/loan/:id', (req, res) => {
     const sql = "SELECT l.loan_id, name, amount, balance, rate, start_date, due_date, SUM(loan) AS loan, SUM(interest) AS interest FROM loan l LEFT JOIN member m ON l.member_id = m.member_id LEFT JOIN payment p ON p.loan_id = l.loan_id WHERE l.member_id = ? GROUP BY l.loan_id";
-    //const sql = "SELECT loan_id, amount, balance, rate, start_date, due_date, (SELECT SUM(loan) FROM payment WHERE loan_id = l.loan_id) AS loan, (SELECT SUM(interest) FROM payment WHERE loan_id = l.loan_id) AS interest FROM loan l WHERE member_id = ?";
     db.query(sql, req.params.id, (err, result) => {
         if (err) return res.json(err);
         return res.json(result);
