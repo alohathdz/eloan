@@ -11,6 +11,7 @@ function DetailLoan() {
     const [name, setName] = useState('');
     let i = 0;
     const { id } = useParams();
+    var nf = new Intl.NumberFormat();
 
     useEffect(() => {
         getLoans();
@@ -90,18 +91,18 @@ function DetailLoan() {
                                             <tr key={key}>
                                                 <td>{++i}</td>
                                                 <td>{moment(row.start_date).locale('th').add(543, 'years').format('ll')}</td>
-                                                <td>{row.amount}</td>
-                                                <td className='text-primary'>{row.balance}</td>
-                                                <td className='text-success'>{row.balance * (row.rate / 100)}</td>
+                                                <td>{nf.format(row.amount)}</td>
+                                                <td className='text-primary'>{nf.format(row.balance)}</td>
+                                                <td className='text-success'>{nf.format(row.balance * (row.rate / 100))}</td>
                                                 {moment().format() > moment(row.due_date).format() ? (
                                                     <td className='text-danger'>{moment(row.due_date).locale('th').add(543, 'years').format('ll')}</td>
                                                 ) : (
                                                     <td>{moment(row.due_date).locale('th').add(543, 'years').format('ll')}</td>
                                                 )}
                                                 <td>
-                                                    {row.loan ? (row.loan) : ("-")}
+                                                    {row.loan ? (nf.format(row.loan)) : ("-")}
                                                 </td>
-                                                <td>{row.interest ? (row.interest) : ("-")}</td>
+                                                <td>{row.interest ? (nf.format(row.interest)) : ("-")}</td>
                                                 <td>
                                                     <Link to={`/pay/create/${row.loan_id}`} className='btn btn-sm btn-success me-2'>ชำระ</Link>
                                                     <Link to={`/loan/edit/${row.loan_id}`} className='btn btn-sm btn-warning me-2'>แก้ไข</Link>
