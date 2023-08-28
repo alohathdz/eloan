@@ -11,24 +11,16 @@ function DetailLoan() {
     const [name, setName] = useState('');
     let i = 0;
     const { id } = useParams();
-    let dateNow = moment().format();
 
     useEffect(() => {
         getLoans();
-        getName();
     }, []);
 
     const getLoans = async () => {
         await axios.get(`http://localhost:8081/loan/${id}`).then(({ data }) => {
             setLoans(data);
+            setName(data[0].name);
         })
-    }
-
-    const getName = async () => {
-        await axios.get(`http://localhost:8081/member/edit/${id}`)
-            .then(res => {
-                setName(res.data[0].name);
-            })
     }
 
     const handleDelete = async (id) => {

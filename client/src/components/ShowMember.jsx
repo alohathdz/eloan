@@ -90,6 +90,8 @@ function ShowMember() {
                                         <th>ชื่อ</th>
                                         <th>เงินต้น</th>
                                         <th>ดอกเบี้ย</th>
+                                        <th>จ่ายต้น</th>
+                                        <th>จ่ายดอก</th>
                                         <th>จัดการ</th>
                                     </tr>
                                 </thead>
@@ -101,6 +103,8 @@ function ShowMember() {
                                                 <td>{row.name}</td>
                                                 <td>{row.balance ? (nf.format(row.balance)) : ("-")}</td>
                                                 <td>{row.interest ? (nf.format(row.interest)) : ("-")}</td>
+                                                <td>{row.pay_loan ? (nf.format(row.pay_loan)) : ("-")}</td>
+                                                <td>{row.pay_interest ? (nf.format(row.pay_interest)) : ("-")}</td>
                                                 <td>
                                                     <Link to={`/loan/${row.member_id}`} className='btn btn-info btn-sm'>การกู้</Link>
                                                     <Link to={`/member/edit/${row.member_id}`} className='btn btn-sm btn-warning mx-2'>แก้ไข</Link>
