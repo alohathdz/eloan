@@ -9,8 +9,8 @@ function DetailLoan() {
 
     const [loans, setLoans] = useState([]);
     const [name, setName] = useState('');
-    let i = 0;
     const { id } = useParams();
+    let i = 0;
     var nf = new Intl.NumberFormat();
 
     useEffect(() => {
@@ -22,6 +22,34 @@ function DetailLoan() {
             setLoans(data);
             setName(data[0].name);
         })
+    }
+
+    const handlePayInterest = async (id) => {
+        const isConfirm = await Swal.fire({
+            title: "ยันยันชำระดอกเบี้ยทั้งหมด",
+            text: "เมื่อยันแล้ว ดอกเบี้ยจะถูกชำระทั้งหมด",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "ยืนยัน",
+            cancelButtonText: "ยกเลิก"
+        }).then((result) => {
+            return result.isConfirmed
+        })
+
+        if (!isConfirm) {
+            return;
+        }
+
+        await axios.get(`http://localhost:8081/pay/interest/${id}`)
+            .then(res => {
+                Swal.fire({
+                    icon: "success",
+                    text: "ชำระดอกเบี้ยทั้งหมดเรียบร้อย!"
+                })
+                getLoans();
+            }).catch(err => console.log(err))
     }
 
     const handleDelete = async (id) => {
@@ -63,6 +91,7 @@ function DetailLoan() {
                         <Link className="btn btn-sm btn-primary mb-2 me-1" to={`/loan/create/${id}`}>
                             เพิ่มยอดกู้
                         </Link>
+                        <Button className='btn btn-sm btn-success mb-2 me-1' onClick={e => handlePayInterest(id)}>ชำระดอก</Button>
                         <Link className="btn btn-sm btn-secondary mb-2" to={"/member"}>
                             ย้อนกลับ
                         </Link>

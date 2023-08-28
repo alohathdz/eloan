@@ -138,5 +138,19 @@ app.get('/CheckDueDate', (req, res) => {
     });
 });
 
+app.get('/pay/interest/:id', (req, res) => {
+    const sql = "SELECT loan_id, balance*rate/100 AS interest FROM loan WHERE member_id = ?";
+    db.query(sql, req.params.id, (err, result) => {
+        if (err) console.log(err);
+        for (let i = 0; i < result.length; i++) {
+            let id = result[i].loan_id;
+            let interest = result[i].interest;
+            db.query("INSERT INTO payment (loan, interest, pay_date, loan_id) VALUES(0, ?, NOW(), ?)", [interest, id]);
+        }
+        return res.json(result);
+    });
+});
+
 app.get('/', (req, res) => {
+    return res.json("Hello World.");
 });
