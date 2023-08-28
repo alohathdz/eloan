@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Button } from 'react-bootstrap'
+import { Button, Table } from 'react-bootstrap'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 
@@ -82,49 +82,47 @@ function ShowMember() {
                 </div>
                 <div className="col-12">
                     <div className="card card-body">
-                        <div className="table-responsive">
-                            <table className="table table-bordered mb-0 text-center">
-                                <thead>
-                                    <tr>
-                                        <th>ลำดับ</th>
-                                        <th>ชื่อ</th>
-                                        <th>เงินต้น</th>
-                                        <th>ดอกเบี้ย</th>
-                                        <th>จ่ายต้น</th>
-                                        <th>จ่ายดอก</th>
-                                        <th>จัดการ</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {members.length > 0 ? (
-                                        members.map((row, key) => (
-                                            <tr key={key}>
-                                                <td>{++i}</td>
-                                                <td>{row.name}</td>
-                                                <td>{row.balance ? (nf.format(row.balance)) : ("-")}</td>
-                                                <td>{row.interest ? (nf.format(row.interest)) : ("-")}</td>
-                                                <td>{row.pay_loan ? (nf.format(row.pay_loan)) : ("-")}</td>
-                                                <td>{row.pay_interest ? (nf.format(row.pay_interest)) : ("-")}</td>
-                                                <td>
-                                                    <Link to={`/loan/${row.member_id}`} className='btn btn-info btn-sm'>การกู้</Link>
-                                                    <Link to={`/member/edit/${row.member_id}`} className='btn btn-sm btn-warning mx-2'>แก้ไข</Link>
-                                                    <Button className='btn btn-danger btn-sm' onClick={e => handleDelete(row.member_id)}>ลบ</Button>
-                                                </td>
-                                            </tr>
-                                        ))
-                                    ) : (
-                                        <tr>
-                                            <td colSpan="5">ไม่พบข้อมูลผู้กู้</td>
+                        <Table responsive bordered hover className="mb-0 text-center">
+                            <thead>
+                                <tr>
+                                    <th>ลำดับ</th>
+                                    <th>ชื่อ</th>
+                                    <th>เงินต้น</th>
+                                    <th>ดอกเบี้ย</th>
+                                    <th>จ่ายต้น</th>
+                                    <th>จ่ายดอก</th>
+                                    <th>จัดการ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {members.length > 0 ? (
+                                    members.map((row, key) => (
+                                        <tr key={key}>
+                                            <td>{++i}</td>
+                                            <td>{row.name}</td>
+                                            <td>{row.balance ? (nf.format(row.balance)) : ("-")}</td>
+                                            <td>{row.interest ? (nf.format(row.interest)) : ("-")}</td>
+                                            <td>{row.pay_loan ? (nf.format(row.pay_loan)) : ("-")}</td>
+                                            <td>{row.pay_interest ? (nf.format(row.pay_interest)) : ("-")}</td>
+                                            <td>
+                                                <Link to={`/loan/${row.member_id}`} className='btn btn-info btn-sm'>การกู้</Link>
+                                                <Link to={`/member/edit/${row.member_id}`} className='btn btn-sm btn-warning mx-2'>แก้ไข</Link>
+                                                <Button className='btn btn-danger btn-sm' onClick={e => handleDelete(row.member_id)}>ลบ</Button>
+                                            </td>
                                         </tr>
-                                    )}
+                                    ))
+                                ) : (
                                     <tr>
-                                        <td colSpan={2}>รวม</td>
-                                        <td>{nf.format(sum_balance)}</td>
-                                        <td>{nf.format(sum_interest)}</td>
+                                        <td colSpan="5">ไม่พบข้อมูลผู้กู้</td>
                                     </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                                )}
+                                <tr>
+                                    <td colSpan={2}>รวม</td>
+                                    <td>{nf.format(sum_balance)}</td>
+                                    <td>{nf.format(sum_interest)}</td>
+                                </tr>
+                            </tbody>
+                        </Table>
                     </div>
                 </div>
             </div>
