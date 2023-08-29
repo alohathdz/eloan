@@ -9,6 +9,8 @@ function CreatePay() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [name, setName] = useState('');
+    const [balance, setBalance] = useState('');
+    const [interest, setInterest] = useState('');
     const [values, setValues] = useState({
         loan: '',
         interest: '',
@@ -17,13 +19,15 @@ function CreatePay() {
     });
 
     useEffect(() => {
-        getName();
+        getLoan();
     }, [])
 
-    const getName = async () => {
-        await axios.get('http://localhost:8081/loan/edit/' + id)
+    const getLoan = async () => {
+        await axios.get('http://localhost:8081/PayList/' + id)
             .then(res => {
                 setName(res.data[0].name);
+                setBalance(res.data[0].balance);
+                setInterest(res.data[0].interest);
             }).catch(err => console.log(err))
     }
 
@@ -55,11 +59,11 @@ function CreatePay() {
                                     <Row>
                                         <Col>
                                             <Form.Group controlId="Loan" className='mb-3'>
-                                                <Form.Label>ชำระเงินต้น</Form.Label>
+                                                <Form.Label>ชำระเงินต้น <font color="red">( {balance} )</font></Form.Label>
                                                 <Form.Control type="text" onChange={e => setValues({ ...values, loan: e.target.value })} />
                                             </Form.Group>
                                             <Form.Group controlId="Interest" className='mb-3'>
-                                                <Form.Label>ชำระดอกเบี้ย</Form.Label>
+                                                <Form.Label>ชำระดอกเบี้ย <font color="red">( {interest} )</font></Form.Label>
                                                 <Form.Control type="text" onChange={e => setValues({ ...values, interest: e.target.value })} />
                                             </Form.Group>
                                             <Form.Group controlId="patDate" className='mb-3'>

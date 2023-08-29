@@ -151,6 +151,13 @@ app.get('/pay/interest/:id', (req, res) => {
     });
 });
 
+app.get('/PayList/:id', (req, res) => {
+    db.query("SELECT balance, balance*rate/100 AS interest, name FROM loan l INNER JOIN member m ON l.member_id = m.member_id WHERE loan_id = ?", req.params.id, (err, result) => {
+        if (err) return res.json(err);
+        return res.json(result);
+    })
+});
+
 app.get('/', (req, res) => {
     return res.json("Hello World.");
 });
