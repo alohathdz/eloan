@@ -143,9 +143,10 @@ app.get('/pay/interest/:id', (req, res) => {
     db.query(sql, req.params.id, (err, result) => {
         if (err) console.log(err);
         for (let i = 0; i < result.length; i++) {
-            let id = result[i].loan_id;
+            let loan_id = result[i].loan_id;
             let interest = result[i].interest;
-            db.query("INSERT INTO payment (loan, interest, pay_date, loan_id) VALUES(0, ?, NOW(), ?)", [interest, id]);
+            db.query("INSERT INTO payment (loan, interest, pay_date, loan_id) VALUES(0, ?, NOW(), ?)", [interest, loan_id]);
+            db.query("UPDATE loan SET due_date = DATE_ADD(due_date, INTERVAL 1 MONTH) WHERE loan_id = ?", loan_id);
         }
         return res.json(result);
     });

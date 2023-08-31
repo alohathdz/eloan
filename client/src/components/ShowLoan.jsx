@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { Button, Table } from 'react-bootstrap'
+import { Button, Table, Modal } from 'react-bootstrap'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import moment from 'moment/min/moment-with-locales'
@@ -80,6 +80,10 @@ function DetailLoan() {
             }).catch(err => console.log(err))
     }
 
+    const [show, setShow] = useState(false);
+    const handleShow = () => setShow(true);
+    const handleClose = () => setShow(false);
+
     return (
         <div className="container">
             <div className="row">
@@ -91,7 +95,21 @@ function DetailLoan() {
                         <Link className="btn btn-sm btn-primary mb-2 me-1" to={`/loan/create/${id}`}>
                             เพิ่มยอดกู้
                         </Link>
-                        <Button className='btn btn-sm btn-success mb-2 me-1' onClick={e => handlePayInterest(id)}>ชำระดอก</Button>
+                        <Button className='btn btn-sm btn-success mb-2 me-1' onClick={handleShow}>ชำระดอก</Button>
+                        <Modal show={show} onHide={handleClose}>
+                            <Modal.Header closeButton>
+                                <Modal.Title>ชำระรวม</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>Woohoo, you are reading this text in a modal!</Modal.Body>
+                            <Modal.Footer>
+                                <Button variant="secondary" onClick={handleClose}>
+                                    Close
+                                </Button>
+                                <Button variant="primary" onClick={handleClose}>
+                                    Save Changes
+                                </Button>
+                            </Modal.Footer>
+                        </Modal>
                         <Link className="btn btn-sm btn-secondary mb-2" to={"/member"}>
                             ย้อนกลับ
                         </Link>
