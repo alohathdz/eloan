@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { Button, Table, Modal } from 'react-bootstrap'
+import { Button, Table, Modal, Form } from 'react-bootstrap'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import moment from 'moment/min/moment-with-locales'
@@ -100,13 +100,20 @@ function DetailLoan() {
                             <Modal.Header closeButton>
                                 <Modal.Title>ชำระรวม</Modal.Title>
                             </Modal.Header>
-                            <Modal.Body>Woohoo, you are reading this text in a modal!</Modal.Body>
+                            <Modal.Body>
+                                <Form>
+                                    <Form.Group controlId="PayDate">
+                                        <Form.Label>วันที่ชำระ</Form.Label>
+                                        <Form.Control type="date" />
+                                    </Form.Group>
+                                </Form>
+                            </Modal.Body>
                             <Modal.Footer>
                                 <Button variant="secondary" onClick={handleClose}>
-                                    Close
+                                    ปิด
                                 </Button>
                                 <Button variant="primary" onClick={handleClose}>
-                                    Save Changes
+                                    บันทึก
                                 </Button>
                             </Modal.Footer>
                         </Modal>

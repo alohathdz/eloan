@@ -131,6 +131,13 @@ app.post('/pay/create', (req, res) => {
     });
 });
 
+app.get('/pay/edit/:id', (req, res) => {
+    db.query("SELECT payment_id, loan, interest, pay_date FROM payment WHERE payment_id = ?", req.params.id, (err, result) => {
+        if (err) return res.json(err);
+        return res.json(result);
+    });
+})
+
 app.get('/CheckDueDate', (req, res) => {
     db.query("SELECT DISTINCT(member_id) FROM `loan` WHERE due_date > NOW()", (err, result) => {
         if (err) console.log(err);
@@ -153,6 +160,13 @@ app.get('/pay/interest/:id', (req, res) => {
 });
 
 app.get('/PayList/:id', (req, res) => {
+    db.query("SELECT payment_id, loan, interest, pay_date FROM payment WHERE loan_id = ?", req.params.id, (err, result) => {
+        if (err) return res.json(err);
+        return res.json(result);
+    })
+});
+
+app.get('/LoanList/:id', (req, res) => {
     db.query("SELECT balance, balance*rate/100 AS interest, name FROM loan l INNER JOIN member m ON l.member_id = m.member_id WHERE loan_id = ?", req.params.id, (err, result) => {
         if (err) return res.json(err);
         return res.json(result);

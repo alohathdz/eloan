@@ -11,6 +11,7 @@ import ShowLoan from "./components/ShowLoan"
 import CreateLoan from "./components/CreateLoan"
 import EditLoan from "./components/EditLoan"
 import CreatePay from "./components/CreatePay"
+import EditPay from "./components/EditPay"
 
 function App() {
 
@@ -36,6 +37,7 @@ function App() {
               <Route path="/loan/create/:id" element={<CreateLoan />} />
               <Route path="/loan/edit/:id" element={<EditLoan />} />
               <Route path="/pay/create/:id" element={<CreatePay />} />
+              <Route path="/pay/edit/:id" element={<EditPay />} />
             </Routes>
           </Col>
         </Row>
