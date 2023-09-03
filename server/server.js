@@ -132,11 +132,32 @@ app.post('/pay/create', (req, res) => {
 });
 
 app.get('/pay/edit/:id', (req, res) => {
-    db.query("SELECT payment_id, loan, interest, pay_date FROM payment WHERE payment_id = ?", req.params.id, (err, result) => {
+    db.query("SELECT * FROM payment WHERE payment_id = ?", req.params.id, (err, result) => {
         if (err) return res.json(err);
         return res.json(result);
     });
 })
+
+app.post('/pay/update/:id', (req, res) => {
+    db.query("UPDATE loan SET balance = balance + ?, due_date = DATE_ADD(due_date, INTERVAL -1 MONTH) WHERE loan_id = ?". [req.body.old_loan, req.body.loan_id], (err, result) => {
+        if (err) console.log(err);
+    });
+
+    let date_time = new Date(req.body.pay_date);
+    let date = date_time.getDate();
+    let month = date_time.getMonth() + 1;
+    let year = date_time.getFullYear();
+    let pay_date = year + "-" + month + "-" + date;
+    
+    const values = [
+        req.body.loan,
+        req.body.interest,
+        pay_date,
+        req.body.old_loan,
+        req.params.id
+    ]
+    return console.log(values);
+});
 
 app.get('/CheckDueDate', (req, res) => {
     db.query("SELECT DISTINCT(member_id) FROM `loan` WHERE due_date > NOW()", (err, result) => {
@@ -153,7 +174,7 @@ app.post('/pay/interest/:id', (req, res) => {
     let year = date_time.getFullYear();
     let pay_date = year + "-" + month + "-" + date;
 
-    const query = db.query(sql, req.params.id, (err, result) => {
+    db.query(sql, req.params.id, (err, result) => {
         if (err) console.log(err);
         for (let i = 0; i < result.length; i++) {
             let loan_id = result[i].loan_id;

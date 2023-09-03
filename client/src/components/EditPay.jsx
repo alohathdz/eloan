@@ -5,20 +5,35 @@ import Swal from 'sweetalert2'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import moment from 'moment/min/moment-with-locales'
 
-function CreatePay() {
+function EditPay() {
 
     const { id } = useParams();
     const navigate = useNavigate();
     const [values, setValues] = useState({
         loan: '',
         interest: '',
-        pay_date: ''
+        pay_date: '',
+        loan_id: '',
+        old_loan: ''
     });
 
     const getPayment = async () => {
         await axios.get('http://localhost:8081/pay/edit/' + id)
         .then(res => {
-            setValues({ ...values, loan: res.data[0].loan, interest: res.data[0].interest, pay_date: res.data[0].pay_date })
+            setValues({ ...values, loan: res.data[0].loan, interest: res.data[0].interest, pay_date: res.data[0].pay_date, loan_id: res.data[0].loan_id, old_loan: res.data[0].loan })
+        }).catch(err => console.log(err))
+    }
+
+    const handleUpdate = async () => {
+        await axios.post('http://localhost:8081/pay/update/' + id, values)
+        .then(res => {
+            console.log(res);
+            Swal.fire({
+                icon: "success",
+                text: "แก้ไขการชำระยอด สำเร็จ!"
+            })
+
+            navigate(-1);
         }).catch(err => console.log(err))
     }
 
@@ -32,10 +47,10 @@ function CreatePay() {
                 <div className="col-12 col-sm-12 col-md-6">
                     <div className="card">
                         <div className="card-body">
-                            <h4 className="card-title">แก้ไขการชำระเงินกู้ของ <font color="red">{name}</font></h4>
+                            <h4 className="card-title">แก้ไขการชำระเงินกู้ของ <font color="red">{values.loan_id}</font></h4>
                             <hr />
                             <div className="form-wrapper">
-                                <Form>
+                                <Form onSubmit={handleUpdate}>
                                     <Row>
                                         <Col>
                                             <Form.Group controlId="Loan" className='mb-3'>
@@ -64,4 +79,4 @@ function CreatePay() {
     )
 }
 
-export default CreatePay
+export default EditPay
