@@ -139,7 +139,7 @@ app.get('/pay/edit/:id', (req, res) => {
 })
 
 app.post('/pay/update/:id', (req, res) => {
-    db.query("UPDATE loan SET balance = balance + ?, due_date = DATE_ADD(due_date, INTERVAL -1 MONTH) WHERE loan_id = ?". [req.body.old_loan, req.body.loan_id], (err, result) => {
+    db.query("UPDATE loan SET balance = balance + ?, due_date = DATE_ADD(due_date, INTERVAL -1 MONTH) WHERE loan_id = ?", [req.body.old_loan, req.body.loan_id], (err, result) => {
         if (err) console.log(err);
     });
 
