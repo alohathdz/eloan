@@ -56,6 +56,35 @@ function CreatePay() {
             }).catch(err => console.log(err))
     }
 
+    const handleDelete = async (id) => {
+        const isConfirm = await Swal.fire({
+            title: "ยันยันการลบข้อมูล",
+            text: "เมื่อยันแล้ว ข้อมูลจะหายไป",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "ยืนยัน",
+            cancelButtonText: "ยกเลิก"
+        }).then((result) => {
+            return result.isConfirmed
+        })
+
+        if (!isConfirm) {
+            return;
+        }
+
+        await axios.delete('http://localhost:8081/pay/delete/' + id)
+            .then(res => {
+                Swal.fire({
+                    icon: "success",
+                    text: "Delete Payment Success!"
+                })
+                getLoan();
+                getPays();
+            }).catch(err => console.log(err))
+    }
+
     return (
         <div className="container">
             <div className="row justify-content-center">
@@ -109,7 +138,7 @@ function CreatePay() {
                                     <td>{row.interest}</td>
                                     <td>
                                         <Link to={'/pay/edit/' + row.payment_id} className='btn btn-sm btn-warning me-2'>แก้ไข</Link>
-                                        <Button variant='danger' size='sm'>ลบ</Button>
+                                        <Button variant='danger' size='sm' onClick={e => handleDelete(row.payment_id)}>ลบ</Button>
                                     </td>
                                 </tr>
                             ))

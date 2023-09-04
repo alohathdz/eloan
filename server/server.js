@@ -154,6 +154,23 @@ app.put('/pay/update/:id', (req, res) => {
     })
 });
 
+app.delete('/pay/delete/:id', (req, res) => {
+    const sql1 = "SELECT loan, loan_id FROM payment WHERE payment_id = ?"
+    const sql2 = "UPDATE loan SET balance = balance + ?, due_date = DATE_ADD(due_date, INTERVAL -1 MONTH) WHERE loan_id = ?;"
+    const sql3 = "DELETE FROM payment WHERE payment_id = ?"
+    db.query(sql1, req.params.id, (err, result) => {
+        if (err) throw err
+
+        const loan = result[0].loan
+        const loan_id = result[0].loan_id
+
+        db.query(sql2 + sql3, [loan, loan_id, req.params.id], (err, result) => {
+            if (err) throw err
+            return res.json(result)
+        })
+    })
+})
+
 app.get('/CheckDueDate', (req, res) => {
     db.query("SELECT DISTINCT(member_id) FROM `loan` WHERE due_date > NOW()", (err, result) => {
         if (err) throw err;
@@ -199,5 +216,5 @@ app.get('/LoanList/:id', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-    return res.json("Hello World.");
+    const sql1 = "SELECT loan, loan_id FROM payment WHERE payment_id = ?"
 });
