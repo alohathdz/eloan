@@ -173,22 +173,31 @@ app.get('/CheckDueDate', (req, res) => {
 });
 
 app.post('/pay/interest/:id', (req, res) => {
-    const sql = "SELECT loan_id, balance*rate/100 AS interest FROM loan WHERE member_id = ?";
     let date_time = new Date(req.body.pay_date);
     let date = date_time.getDate();
     let month = date_time.getMonth() + 1;
     let year = date_time.getFullYear();
     let pay_date = year + "-" + month + "-" + date;
 
-    db.query(sql, req.params.id, (err, result) => {
-        if (err) console.log(err);
-        for (let i = 0; i < result.length; i++) {
-            let loan_id = result[i].loan_id;
-            let interest = result[i].interest;
-            db.query("INSERT INTO payment (loan, interest, pay_date, loan_id) VALUES(0, ?, ?, ?)", [interest, pay_date, loan_id]);
-            db.query("UPDATE loan SET due_date = DATE_ADD(due_date, INTERVAL 1 MONTH) WHERE loan_id = ?", loan_id);
+    db.query("SELECT loan_id, balance*rate/100 AS interest FROM loan WHERE member_id = ?", req.params.id, (err, result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            for (let i = 0; i < result.length; i++) {
+                let loan_id = result[i].loan_id;
+                let interest = result[i].interest;
+                db.query("INSERT INTO payment (loan, interest, pay_date, loan_id) VALUES(0, ?, ?, ?)", [interest, pay_date, loan_id], (err, result) => {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        db.query("UPDATE loan SET due_date = DATE_ADD(due_date, INTERVAL 1 MONTH) WHERE loan_id = ?", loan_id, (err, result) => {
+                            if (err) console.log(err);
+                            return res.json(result);
+                        });
+                    }
+                });
+            }
         }
-        return res.json(result);
     });
 });
 

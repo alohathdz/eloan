@@ -25,7 +25,9 @@ function DetailLoan() {
         })
     }
 
-    const handlePayInterest = async () => {
+    const handlePayInterest = async (e) => {
+        e.preventDefault();
+        
         await axios.post('http://localhost:8081/pay/interest/' + id, { pay_date })
             .then(res => {
                 Swal.fire({
