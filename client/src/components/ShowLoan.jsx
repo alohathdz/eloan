@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Button, Table, Modal, Form } from 'react-bootstrap'
 import axios from 'axios'
 import Swal from 'sweetalert2'
@@ -13,6 +13,7 @@ function DetailLoan() {
     const { id } = useParams();
     let i = 0;
     var nf = new Intl.NumberFormat();
+    const navigate = useNavigate();
 
     useEffect(() => {
         getLoans();
@@ -27,14 +28,15 @@ function DetailLoan() {
 
     const handlePayInterest = async (e) => {
         e.preventDefault();
-        
+
         await axios.post('http://localhost:8081/pay/interest/' + id, { pay_date })
             .then(res => {
+                setShow(false)
+                getLoans()
                 Swal.fire({
                     icon: "success",
                     text: "ชำระดอกเบี้ยทั้งหมดเรียบร้อย!"
                 })
-                getLoans();
             }).catch(err => console.log(err))
     }
 
@@ -94,10 +96,10 @@ function DetailLoan() {
                                     </Form.Group>
                                 </Modal.Body>
                                 <Modal.Footer>
-                                    <Button variant="secondary" onClick={handleClose}>
+                                    <Button variant="secondary" size='sm' onClick={handleClose}>
                                         ปิด
                                     </Button>
-                                    <Button variant="primary" type="submit">
+                                    <Button variant="primary" size='sm' type="submit">
                                         บันทึก
                                     </Button>
                                 </Modal.Footer>
