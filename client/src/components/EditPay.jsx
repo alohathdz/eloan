@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Form, Button, Row, Col, Table } from 'react-bootstrap'
+import { Form, Button, Row, Col } from 'react-bootstrap'
 import axios from 'axios'
 import Swal from 'sweetalert2'
-import { useNavigate, useParams, Link } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import moment from 'moment/min/moment-with-locales'
 
 function EditPay() {
@@ -17,29 +17,29 @@ function EditPay() {
         old_loan: ''
     });
 
-    const getPayment = async () => {
-        await axios.get('http://localhost:8081/pay/edit/' + id)
-        .then(res => {
-            setValues({ ...values, loan: res.data[0].loan, interest: res.data[0].interest, pay_date: res.data[0].pay_date, loan_id: res.data[0].loan_id, old_loan: res.data[0].loan })
-        }).catch(err => console.log(err))
-    }
-
-    const handleUpdate = async () => {
-        await axios.post('http://localhost:8081/pay/update/' + id, values)
-        .then(res => {
-            console.log(res);
-            Swal.fire({
-                icon: "success",
-                text: "แก้ไขการชำระยอด สำเร็จ!"
-            })
-
-            navigate(-1);
-        }).catch(err => console.log(err))
-    }
-
     useEffect(() => {
         getPayment();
     }, []);
+
+    const getPayment = async () => {
+        await axios.get('http://localhost:8081/pay/edit/' + id)
+            .then(res => {
+                setValues({ ...values, loan: res.data[0].loan, interest: res.data[0].interest, pay_date: res.data[0].pay_date, loan_id: res.data[0].loan_id, old_loan: res.data[0].loan })
+            }).catch(err => console.log(err))
+    }
+
+    const handleUpdate = async (e) => {
+        e.preventDefault();
+
+        await axios.put('http://localhost:8081/pay/update/' + id, values)
+            .then(res => {
+                Swal.fire({
+                    icon: "success",
+                    text: "Update Payment Success!"
+                })
+                navigate(-1)
+            }).catch(err => console.log(err))
+    }
 
     return (
         <div className="container">
