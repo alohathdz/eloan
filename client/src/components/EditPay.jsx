@@ -47,7 +47,7 @@ function EditPay() {
                 <div className="col-12 col-sm-12 col-md-6">
                     <div className="card">
                         <div className="card-body">
-                            <h4 className="card-title">แก้ไขการชำระเงินกู้ของ <font color="red">{values.loan_id}</font></h4>
+                            <h4 className="card-title">แก้ไขการชำระเงินกู้</h4>
                             <hr />
                             <div className="form-wrapper">
                                 <Form onSubmit={handleUpdate}>
