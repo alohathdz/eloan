@@ -54,15 +54,15 @@ function CreateLoan() {
                                         <Col>
                                             <Form.Group controlId="Amount" className='mb-3'>
                                                 <Form.Label>ยอดกู้</Form.Label>
-                                                <Form.Control type="text" onChange={e => setValues({ ...values, amount: e.target.value })} />
+                                                <Form.Control type="number" onChange={e => setValues({ ...values, amount: e.target.value })} required/>
                                             </Form.Group>
                                             <Form.Group controlId="Rate" className='mb-3'>
                                                 <Form.Label>อัตราดอกเบี้ย</Form.Label>
-                                                <Form.Control type="text" onChange={e => setValues({ ...values, rate: e.target.value })} />
+                                                <Form.Control type="number" onChange={e => setValues({ ...values, rate: e.target.value })} required/>
                                             </Form.Group>
                                             <Form.Group controlId="startDate" className='mb-3'>
                                                 <Form.Label>วันที่กู้</Form.Label>
-                                                <Form.Control type="date" onChange={e => setValues({ ...values, start_date: e.target.value })} />
+                                                <Form.Control type="date" onChange={e => setValues({ ...values, start_date: e.target.value })} required/>
                                             </Form.Group>
                                         </Col>
                                     </Row>

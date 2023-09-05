@@ -15,7 +15,7 @@ function ShowMember() {
     }, []);
 
     const getMembers = async () => {
-        await axios.get(`http://localhost:8081/member`).then(({ data }) => {
+        await axios.get('http://localhost:8081/member').then(({ data }) => {
             setMembers(data);
         });
     }

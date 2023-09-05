@@ -99,15 +99,15 @@ function CreatePay() {
                                         <Col>
                                             <Form.Group controlId="Loan" className='mb-3'>
                                                 <Form.Label>ชำระเงินต้น <font color="red">( {balance} )</font></Form.Label>
-                                                <Form.Control type="text" onChange={e => setValues({ ...values, loan: e.target.value })} />
+                                                <Form.Control type="number" onChange={e => setValues({ ...values, loan: e.target.value })} required/>
                                             </Form.Group>
                                             <Form.Group controlId="Interest" className='mb-3'>
                                                 <Form.Label>ชำระดอกเบี้ย <font color="red">( {interest} )</font></Form.Label>
-                                                <Form.Control type="text" onChange={e => setValues({ ...values, interest: e.target.value })} />
+                                                <Form.Control type="number" onChange={e => setValues({ ...values, interest: e.target.value })} required/>
                                             </Form.Group>
                                             <Form.Group controlId="PayDate" className='mb-3'>
                                                 <Form.Label>วันที่ชำระ</Form.Label>
-                                                <Form.Control type="date" onChange={e => setValues({ ...values, pay_date: e.target.value })} />
+                                                <Form.Control type="date" onChange={e => setValues({ ...values, pay_date: e.target.value })} required/>
                                             </Form.Group>
                                         </Col>
                                     </Row>

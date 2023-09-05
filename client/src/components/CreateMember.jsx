@@ -38,7 +38,7 @@ function CreateMember() {
                                         <Col>
                                             <Form.Group controlId="Name" className='mb-3'>
                                                 <Form.Label>ชื่อ</Form.Label>
-                                                <Form.Control type="text" onChange={e => setName(e.target.value)} />
+                                                <Form.Control type="text" onChange={e => setName(e.target.value)} required/>
                                             </Form.Group>
                                         </Col>
                                     </Row>

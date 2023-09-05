@@ -15,7 +15,7 @@ function EditMember() {
     }, [])
 
     const getMember = async () => {
-        await axios.get(`http://localhost:8081/member/edit/${id}`)
+        await axios.get('http://localhost:8081/member/edit/' + id)
             .then(res => {
                 setName(res.data[0].name)
             }).catch(err => console.log(err))
@@ -24,7 +24,7 @@ function EditMember() {
     const handleUpdate = async (e) => {
         e.preventDefault();
 
-        await axios.put(`http://localhost:8081/member/update/${id}`, {name})
+        await axios.put('http://localhost:8081/member/update/' + id, { name })
             .then(res => {
                 Swal.fire({
                     icon: "success",
@@ -48,7 +48,7 @@ function EditMember() {
                                         <Col>
                                             <Form.Group controlId="Name" className='mb-3'>
                                                 <Form.Label>ชื่อ</Form.Label>
-                                                <Form.Control type="text" value={name} onChange={e => setName(e.target.value)} />
+                                                <Form.Control type="text" value={name} onChange={e => setName(e.target.value)} required/>
                                             </Form.Group>
                                         </Col>
                                     </Row>

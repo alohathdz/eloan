@@ -13,7 +13,6 @@ function DetailLoan() {
     const { id } = useParams();
     let i = 0;
     var nf = new Intl.NumberFormat();
-    const navigate = useNavigate();
 
     useEffect(() => {
         getLoans();
@@ -80,7 +79,7 @@ function DetailLoan() {
                         <h4>รายการกู้ของ <font color="red">{name}</font></h4>
                     </div>
                     <div className="float-end">
-                        <Link className="btn btn-sm btn-primary mb-2 me-1" to={`/loan/create/${id}`}>
+                        <Link className="btn btn-sm btn-primary mb-2 me-1" to={'/loan/create/' + id}>
                             เพิ่มยอดกู้
                         </Link>
                         <Button className='btn btn-sm btn-success mb-2 me-1' onClick={handleShow}>ชำระดอก</Button>
@@ -92,7 +91,7 @@ function DetailLoan() {
                                 <Modal.Body>
                                     <Form.Group controlId="PayDate">
                                         <Form.Label>วันที่ชำระ</Form.Label>
-                                        <Form.Control type="date" onChange={e => setPayDate(e.target.value)} />
+                                        <Form.Control type="date" onChange={e => setPayDate(e.target.value)} required/>
                                     </Form.Group>
                                 </Modal.Body>
                                 <Modal.Footer>

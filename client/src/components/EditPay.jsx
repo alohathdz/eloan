@@ -55,15 +55,15 @@ function EditPay() {
                                         <Col>
                                             <Form.Group controlId="Loan" className='mb-3'>
                                                 <Form.Label>ชำระเงินต้น</Form.Label>
-                                                <Form.Control type="text" value={values.loan} onChange={e => setValues({ ...values, loan: e.target.value })} />
+                                                <Form.Control type="number" value={values.loan} onChange={e => setValues({ ...values, loan: e.target.value })} required/>
                                             </Form.Group>
                                             <Form.Group controlId="Interest" className='mb-3'>
                                                 <Form.Label>ชำระดอกเบี้ย</Form.Label>
-                                                <Form.Control type="text" value={values.interest} onChange={e => setValues({ ...values, interest: e.target.value })} />
+                                                <Form.Control type="number" value={values.interest} onChange={e => setValues({ ...values, interest: e.target.value })} required/>
                                             </Form.Group>
                                             <Form.Group controlId="PayDate" className='mb-3'>
                                                 <Form.Label>วันที่ชำระ</Form.Label>
-                                                <Form.Control type="date" value={moment(values.pay_date).format('YYYY-MM-DD')} onChange={e => setValues({ ...values, pay_date: e.target.value })} />
+                                                <Form.Control type="date" value={moment(values.pay_date).format('YYYY-MM-DD')} onChange={e => setValues({ ...values, pay_date: e.target.value })} required/>
                                             </Form.Group>
                                         </Col>
                                     </Row>
