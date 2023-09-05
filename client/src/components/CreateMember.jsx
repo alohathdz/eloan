@@ -12,7 +12,7 @@ function CreateMember() {
     const handleCreate = async (e) => {
         e.preventDefault();
 
-        await axios.post(`http://localhost:8081/member/create`, { name })
+        await axios.post('http://localhost:8081/member/create', { name })
             .then(res => {
                 Swal.fire({
                     icon: "success",

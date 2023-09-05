@@ -54,7 +54,7 @@ function ShowMember() {
             return;
         }
 
-        await axios.delete(`http://localhost:8081/member/delete/${id}`)
+        await axios.delete('http://localhost:8081/member/delete/' + id)
             .then(res => {
                 Swal.fire({
                     icon: "success",
