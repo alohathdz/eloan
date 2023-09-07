@@ -28,17 +28,34 @@ function EditPay() {
             }).catch(err => console.log(err))
     }
 
+    const [errors, setErrors] = useState({})
+
+    const handleChange = async (e) => {
+        const { name, value } = e.target
+        setValues({ ...values, [name]: value })
+    }
+
     const handleUpdate = async (e) => {
         e.preventDefault();
 
-        await axios.put('http://localhost:8081/pay/update/' + id, values)
-            .then(res => {
-                Swal.fire({
-                    icon: "success",
-                    text: "Update Payment Success!"
-                })
-                navigate(-1)
-            }).catch(err => console.log(err))
+        const validationError = {}
+
+        if (values.loan === "") validationError.loan = "กรุณาใส่ยอดชำระเงินต้น"
+        if (values.interest === "") validationError.interest = "กรุณาใส่ยอดชำระดอกเบี้ย"
+        if (values.pay_date === "") validationError.pay_date = "กรุณาเลือกวันที่ชำระ"
+
+        setErrors(validationError)
+
+        if (Object.keys(validationError).length === 0) {
+            await axios.put('http://localhost:8081/pay/update/' + id, values)
+                .then(res => {
+                    Swal.fire({
+                        icon: "success",
+                        text: "Update Payment Success!"
+                    })
+                    navigate(-1)
+                }).catch(err => console.log(err))
+        }
     }
 
     return (
@@ -55,15 +72,18 @@ function EditPay() {
                                         <Col>
                                             <Form.Group controlId="Loan" className='mb-3'>
                                                 <Form.Label>ชำระเงินต้น</Form.Label>
-                                                <Form.Control type="number" value={values.loan} onChange={e => setValues({ ...values, loan: e.target.value })} required/>
+                                                <Form.Control type="number" name="loan" value={values.loan} onChange={handleChange} />
+                                                {errors.loan && <p style={{color: 'red'}}>{errors.loan}</p>}
                                             </Form.Group>
                                             <Form.Group controlId="Interest" className='mb-3'>
                                                 <Form.Label>ชำระดอกเบี้ย</Form.Label>
-                                                <Form.Control type="number" value={values.interest} onChange={e => setValues({ ...values, interest: e.target.value })} required/>
+                                                <Form.Control type="number" name="interest" value={values.interest} onChange={handleChange} />
+                                                {errors.interest && <p style={{color: 'red'}}>{errors.interest}</p>}
                                             </Form.Group>
                                             <Form.Group controlId="PayDate" className='mb-3'>
                                                 <Form.Label>วันที่ชำระ</Form.Label>
-                                                <Form.Control type="date" value={moment(values.pay_date).format('YYYY-MM-DD')} onChange={e => setValues({ ...values, pay_date: e.target.value })} required/>
+                                                <Form.Control type="date" name="pay_date" value={moment(values.pay_date).format('YYYY-MM-DD')} onChange={handleChange} />
+                                                {errors.pay_date && <p style={{color: 'red'}}>{errors.pay_date}</p>}
                                             </Form.Group>
                                         </Col>
                                     </Row>

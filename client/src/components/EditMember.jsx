@@ -7,8 +7,10 @@ import { useNavigate, useParams } from 'react-router-dom'
 function EditMember() {
 
     const { id } = useParams();
-    const [name, setName] = useState('');
     const navigate = useNavigate();
+    const [values, setValues] = useState({
+        name: ''
+    })
 
     useEffect(() => {
         getMember();
@@ -17,21 +19,35 @@ function EditMember() {
     const getMember = async () => {
         await axios.get('http://localhost:8081/member/edit/' + id)
             .then(res => {
-                setName(res.data[0].name)
+                setValues({ ...values, name: res.data[0].name })
             }).catch(err => console.log(err))
+    }
+
+    const [errors, setErrors] = useState({})
+
+    const handleChange = async (e) => {
+        const { name, value } = e.target
+        setValues({ ...values, [name]: value })
     }
 
     const handleUpdate = async (e) => {
         e.preventDefault();
 
-        await axios.put('http://localhost:8081/member/update/' + id, { name })
-            .then(res => {
-                Swal.fire({
-                    icon: "success",
-                    text: "Update successfully!"
-                })
-                navigate("/member")
-            }).catch(err => console.log(err))
+        const validationError = {}
+        if (values.name === "") validationError.name = "กรุณาใส่ชื่อ"
+
+        setErrors(validationError)
+
+        if (Object.keys(validationError).length === 0) {
+            await axios.put('http://localhost:8081/member/update/' + id, values)
+                .then(res => {
+                    Swal.fire({
+                        icon: "success",
+                        text: "Update successfully!"
+                    })
+                    navigate("/member")
+                }).catch(err => console.log(err))
+        }
     }
 
     return (
@@ -48,7 +64,8 @@ function EditMember() {
                                         <Col>
                                             <Form.Group controlId="Name" className='mb-3'>
                                                 <Form.Label>ชื่อ</Form.Label>
-                                                <Form.Control type="text" value={name} onChange={e => setName(e.target.value)} required/>
+                                                <Form.Control type="text" name="name" value={values.name} onChange={handleChange} />
+                                                {errors.name && <p style={{color: 'red'}}>{errors.name}</p>}
                                             </Form.Group>
                                         </Col>
                                     </Row>
