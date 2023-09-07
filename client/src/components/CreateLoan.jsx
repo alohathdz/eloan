@@ -36,9 +36,9 @@ function CreateLoan() {
         e.preventDefault();
 
         const validationError = {}
-        if (!values.amount.trim()) { validationError.amount = "กรุณาใส่ยอดที่กู้" }
-        if (!values.rate.trim()) { validationError.rate = "กรุณาใส่อัตราดอกเบี้ย" }
-        if (!values.start_date.trim()) { validationError.start_date = "กรุณาเลือกวันที่กู้" }
+        if (!values.amount.trim()) validationError.amount = "กรุณาใส่ยอดที่กู้"
+        if (!values.rate.trim()) validationError.rate = "กรุณาใส่อัตราดอกเบี้ย"
+        if (!values.start_date.trim()) validationError.start_date = "กรุณาเลือกวันที่กู้"
 
         setErrors(validationError)
 

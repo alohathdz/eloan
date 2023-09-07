@@ -7,21 +7,36 @@ import { useNavigate } from 'react-router-dom'
 function CreateMember() {
 
     const navigate = useNavigate();
-    const [name, setName] = useState('');
+    const [values, setValues] = useState({
+        name: ''
+    })
+
+    const [errors, setErrors] = useState({})
+
+    const handleChange = async (e) => {
+        const { name, value } = e.target
+        setValues({ ...values, [name]: value })
+    }
 
     const handleCreate = async (e) => {
         e.preventDefault();
 
-        await axios.post('http://localhost:8081/member/create', { name })
-            .then(res => {
-                Swal.fire({
-                    icon: "success",
-                    text: "Insert successfully."
-                })
+        const validationError = {}
+        if (!values.name.trim()) validationError.name = "กรุณาใส่ชื่อ"
 
-                navigate("/member");
-            })
-            .catch(err => console.log(err))
+        setErrors(validationError)
+
+        if (Object.keys(validationError).length === 0) {
+            await axios.post('http://localhost:8081/member/create', values)
+                .then(res => {
+                    Swal.fire({
+                        icon: "success",
+                        text: "Insert successfully."
+                    })
+                    navigate("/member");
+                })
+                .catch(err => console.log(err))
+        }
     }
 
     return (
@@ -38,7 +53,8 @@ function CreateMember() {
                                         <Col>
                                             <Form.Group controlId="Name" className='mb-3'>
                                                 <Form.Label>ชื่อ</Form.Label>
-                                                <Form.Control type="text" onChange={e => setName(e.target.value)} required/>
+                                                <Form.Control type="text" name="name" onChange={handleChange} />
+                                                {errors.name && <p style={{color: 'red'}}>{errors.name}</p>}
                                             </Form.Group>
                                         </Col>
                                     </Row>

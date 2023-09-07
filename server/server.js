@@ -24,7 +24,7 @@ function daysInMonth(month, year) {
 }
 
 app.get('/member', (req, res) => {
-    const sql = "SELECT m.member_id, name, SUM(balance) AS balance, SUM(balance*rate/100) AS interest FROM member m RIGHT JOIN loan l ON l.member_id = m.member_id GROUP BY name ORDER BY m.member_id ASC"
+    const sql = "SELECT m.member_id, name, SUM(balance) AS balance, SUM(balance*rate/100) AS interest FROM member m LEFT JOIN loan l ON l.member_id = m.member_id GROUP BY name ORDER BY m.member_id ASC"
     db.query(sql, (err, result) => {
         if (err) throw err;
         return res.json(result);
