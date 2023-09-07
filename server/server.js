@@ -133,7 +133,7 @@ app.post('/pay/create', (req, res) => {
 });
 
 app.get('/pay/edit/:id', (req, res) => {
-    db.query("SELECT loan, interest, pay_date, balance, balance*rate/100 AS itr, name FROM payment p LEFT JOIN loan l ON p.loan_id = l.loan_id LEFT JOIN member m ON l.member_id = m.member_id WHERE p.payment_id = ?", req.params.id, (err, result) => {
+    db.query("SELECT loan, interest, pay_date, balance+loan AS balance, (balance+loan)*rate/100 AS itr, name FROM payment p LEFT JOIN loan l ON p.loan_id = l.loan_id LEFT JOIN member m ON l.member_id = m.member_id WHERE p.payment_id = ?", req.params.id, (err, result) => {
         if (err) throw err;
         return res.json(result);
     });
