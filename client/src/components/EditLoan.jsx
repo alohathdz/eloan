@@ -17,14 +17,15 @@ function EditLoan() {
     const getLoans = async () => {
         await axios.get('http://localhost:8081/loan/edit/' + id)
             .then(res => {
-                setValues({ ...values, amount: res.data[0].amount, rate: res.data[0].rate, start_date: res.data[0].start_date, name: res.data[0].name })
+                setValues({ ...values, amount: res.data[0].amount, rate: res.data[0].rate, start_date: res.data[0].start_date, name: res.data[0].name, old_amount: res.data[0].amount })
             }).catch(err => console.log(err))
     }
 
     const [values, setValues] = useState({
         amount: '',
         rate: '',
-        start_date: ''
+        start_date: '',
+        old_amount: ''
     });
 
     const [errors, setErrors] = useState({})

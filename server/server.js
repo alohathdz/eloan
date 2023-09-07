@@ -104,7 +104,8 @@ app.get('/loan/edit/:id', (req, res) => {
 });
 
 app.put('/loan/update/:id', (req, res) => {
-    db.query("UPDATE loan SET amount = ?, rate = ?, start_date = ? WHERE loan_id = ?", [req.body.amount, req.body.rate, req.body.start_date, req.params.id], (err, result) => {
+    const balance = req.body.amount - req.body.old_amount
+    db.query("UPDATE loan SET amount = ?, rate = ?, balance = balance + ?, start_date = ? WHERE loan_id = ?", [req.body.amount, req.body.rate, balance, req.body.start_date, req.params.id], (err, result) => {
         if (err) throw err;
         return res.json(result);
     })
