@@ -116,6 +116,7 @@ function ShowMember() {
                                     <td colSpan={2}>รวม</td>
                                     <td>{nf.format(sum_balance)}</td>
                                     <td>{nf.format(sum_interest)}</td>
+                                    <td></td>
                                 </tr>
                             </tbody>
                         </Table>
