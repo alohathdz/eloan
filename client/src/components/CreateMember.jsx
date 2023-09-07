@@ -58,8 +58,8 @@ function CreateMember() {
                                             </Form.Group>
                                         </Col>
                                     </Row>
-                                    <Button className="btn btn-sm btn-primary me-2" type="submit">บันทึก</Button>
-                                    <Button className="btn btn-sm btn-danger" onClick={() => navigate(-1)}>ยกเลิก</Button>
+                                    <Button variant="primary" size="sm" className="me-2" type="submit">บันทึก</Button>
+                                    <Button variant="danger" size="sm" onClick={() => navigate(-1)}>ยกเลิก</Button>
                                 </Form>
                             </div>
                         </div>

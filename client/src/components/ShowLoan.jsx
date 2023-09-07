@@ -82,7 +82,7 @@ function DetailLoan() {
                         <Link className="btn btn-sm btn-primary mb-2 me-1" to={'/loan/create/' + id}>
                             เพิ่มยอดกู้
                         </Link>
-                        <Button className='btn btn-sm btn-success mb-2 me-1' onClick={handleShow}>ชำระดอก</Button>
+                        <Button variant="success" size="sm" className="mb-2 me-1" onClick={handleShow}>ชำระดอก</Button>
                         <Modal show={show} onHide={handleClose}>
                             <Form onSubmit={handlePayInterest}>
                                 <Modal.Header closeButton>
@@ -95,10 +95,10 @@ function DetailLoan() {
                                     </Form.Group>
                                 </Modal.Body>
                                 <Modal.Footer>
-                                    <Button variant="secondary" size='sm' onClick={handleClose}>
+                                    <Button variant="secondary" size="sm" onClick={handleClose}>
                                         ปิด
                                     </Button>
-                                    <Button variant="primary" size='sm' type="submit">
+                                    <Button variant="primary" size="sm" type="submit">
                                         บันทึก
                                     </Button>
                                 </Modal.Footer>
@@ -146,7 +146,7 @@ function DetailLoan() {
                                             <td>
                                                 <Link to={`/pay/create/${row.loan_id}`} className='btn btn-sm btn-success me-2'>ชำระ</Link>
                                                 <Link to={`/loan/edit/${row.loan_id}`} className='btn btn-sm btn-warning me-2'>แก้ไข</Link>
-                                                <Button className='btn btn-sm btn-danger' onClick={e => handleDelete(row.loan_id)}>ลบ</Button>
+                                                <Button variant="danger" size="sm" onClick={e => handleDelete(row.loan_id)}>ลบ</Button>
                                             </td>
                                         </tr>
                                     ))

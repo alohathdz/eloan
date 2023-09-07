@@ -103,7 +103,7 @@ function ShowMember() {
                                             <td>
                                                 <Link to={`/loan/${row.member_id}`} className='btn btn-info btn-sm'>การกู้</Link>
                                                 <Link to={`/member/edit/${row.member_id}`} className='btn btn-sm btn-warning mx-2'>แก้ไข</Link>
-                                                <Button className='btn btn-danger btn-sm' onClick={e => handleDelete(row.member_id)}>ลบ</Button>
+                                                <Button variant="danger" size="sm" onClick={e => handleDelete(row.member_id)}>ลบ</Button>
                                             </td>
                                         </tr>
                                     ))
